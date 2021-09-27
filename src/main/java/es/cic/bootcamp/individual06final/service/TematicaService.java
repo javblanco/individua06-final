@@ -153,6 +153,15 @@ public class TematicaService {
 		}
 	}
 	
+	public List<TematicaDto> listActivos() {
+		List<Tematica> lista = tematicaRepository.findAllByActivoTrue();
+
+		LOGGER.info("Listado de temáticas activas");
+		return lista.stream()
+				.map(t -> tematicaHelper.entityToDto(t, this.isEliminable(t.getId())))
+				.collect(Collectors.toList());
+	}
+	
 	private boolean isEliminable(Long id) {
 		
 		return !cursoRepository.existsByTematicaId(id);

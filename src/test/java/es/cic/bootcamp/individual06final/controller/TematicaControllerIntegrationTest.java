@@ -33,6 +33,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.cic.bootcamp.individual06final.dto.TematicaDto;
+import es.cic.bootcamp.individual06final.enumeration.Categoria;
 import es.cic.bootcamp.individual06final.helper.TematicaHelper;
 import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
@@ -268,6 +269,8 @@ class TematicaControllerIntegrationTest {
 		tematica.setNombre("Informática");
 		tematica.setDescripcion("Esta temática es de informática");
 		tematica.setSubtematicas("Big Data, Machine Learning");
+		tematica.setCategoria(Categoria.TECNOLOGIA);
+		tematica.setReferencia("REF-INF-TEC");
 		
 		return tematica;
 	}
@@ -278,6 +281,8 @@ class TematicaControllerIntegrationTest {
 		dto.setNombre("Informática");
 		dto.setDescripcion("Esta temática es de informática");
 		dto.setSubtematicas("Big Data, Machine Learning");
+		dto.setCategoria(Categoria.TECNOLOGIA);
+		dto.setReferencia("REF-INF-TEC");
 		
 		return dto;
 	}

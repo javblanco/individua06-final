@@ -62,13 +62,20 @@ public class TematicaController {
 	
 	@PostMapping("/baja/{id}")
 	public void baja(@PathVariable(required = true, name = "id") Long id) {
-		LOGGER.log(Level.INFO, "Método delete de /api/tematica. Dando de baja el registro de la temática con id {0}", id);
+		LOGGER.log(Level.INFO, "Método post de /api/tematica/baja. Dando de baja el registro de la temática con id {0}", id);
 		tematicaService.baja(id);
 	}
 	
 	@PostMapping("/alta/{id}")
 	public void alta(@PathVariable(required = true, name = "id") Long id) {
-		LOGGER.log(Level.INFO, "Método delete de /api/tematica. Dando de alta el registro de la temática con id {0}", id);
+		LOGGER.log(Level.INFO, "Método post de /api/tematica/alta. Dando de alta el registro de la temática con id {0}", id);
 		tematicaService.alta(id);
+	}
+	
+	@GetMapping("/activos")
+	public List<TematicaDto> listActivos() {
+		LOGGER.log(Level.INFO, "Método get de /api/tematica/activos. Leyendo registros activos actualmente");
+
+		return tematicaService.listActivos();
 	}
 }

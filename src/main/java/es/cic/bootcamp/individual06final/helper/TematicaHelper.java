@@ -27,6 +27,8 @@ public class TematicaHelper {
 		dto.setDescripcion(dto.getDescripcion());
 		dto.setSubtematicas(tematica.getSubtematicas());
 		dto.setActivo(tematica.isActivo());
+		dto.setCategoria(tematica.getCategoria());
+		dto.setReferencia(tematica.getReferencia());
 		
 		List<String> listaSubtematicas = new ArrayList<>();
 		
@@ -46,6 +48,8 @@ public class TematicaHelper {
 		tematica.setNombre(dto.getNombre());
 		tematica.setDescripcion(dto.getDescripcion());
 		tematica.setActivo(dto.isActivo());
+		tematica.setCategoria(dto.getCategoria());
+		tematica.setReferencia(dto.getReferencia());
 		
 		StringBuilder subtematicas = listarSubtematicas(dto);
 		

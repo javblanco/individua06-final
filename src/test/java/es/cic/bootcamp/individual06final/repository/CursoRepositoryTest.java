@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import es.cic.bootcamp.individual06final.enumeration.Categoria;
 import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
 
@@ -178,8 +179,9 @@ class CursoRepositoryTest {
 		tematica.setNombre("Informática");
 		tematica.setDescripcion("Esta temática es de informática");
 		tematica.setSubtematicas("Big Data, Machine Learning");
+		tematica.setCategoria(Categoria.TECNOLOGIA);
+		tematica.setReferencia("REF-INF-TEC");
 		
 		return tematica;
 	}
-
 }
