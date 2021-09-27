@@ -6,4 +6,5 @@ import es.cic.bootcamp.individual06final.model.Curso;
 
 public interface CursoRepository extends CrudRepository<Curso, Long> {
 
+	public boolean existsByTematicaId(Long id);
 }

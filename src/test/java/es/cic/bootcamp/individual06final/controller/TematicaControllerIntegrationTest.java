@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,8 +33,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.cic.bootcamp.individual06final.dto.TematicaDto;
+import es.cic.bootcamp.individual06final.enumeration.Categoria;
 import es.cic.bootcamp.individual06final.helper.TematicaHelper;
+import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
+import es.cic.bootcamp.individual06final.repository.CursoRepository;
 import es.cic.bootcamp.individual06final.repository.TematicaRepository;
 
 
@@ -52,6 +56,9 @@ class TematicaControllerIntegrationTest {
 	
 	@Autowired
 	private ObjectMapper mapper;
+	
+	@Autowired
+	private CursoRepository cursoRepository;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -98,7 +105,7 @@ class TematicaControllerIntegrationTest {
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		
-		TematicaDto dto = tematicaHelper.entityToDto(tematica);
+		TematicaDto dto = tematicaHelper.entityToDto(tematica, false);
 		dto.setId(tematica.getId());
 		
 		String respuesta = mapper.writeValueAsString(dto);
@@ -152,7 +159,7 @@ class TematicaControllerIntegrationTest {
 		
 		tematicaRepository.save(tematica);
 		
-		TematicaDto dto = tematicaHelper.entityToDto(tematica);
+		TematicaDto dto = tematicaHelper.entityToDto(tematica, false);
 		dto.setId(tematica.getId());
 		dto.setNombre("TIC");
 		
@@ -198,12 +205,72 @@ class TematicaControllerIntegrationTest {
 		assertTrue(optional.isEmpty(), "No se ha borrado correctamente el registro");
 	}
 
+	@Test
+	void testDeleteConCursos() throws Exception {
+		Tematica tematica = generarTematica();
+		
+		tematicaRepository.save(tematica);
+		
+		Curso curso = generarCurso(tematica);
+		cursoRepository.save(curso);
+		
+		MockHttpServletRequestBuilder request =
+				delete("/api/tematica/{id}", tematica.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void testBaja() throws Exception{
+		Tematica tematica = tematicaRepository.save(generarTematica());
+		
+		MockHttpServletRequestBuilder request =
+				post("/api/tematica/baja/{id}", tematica.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+		Tematica tematicaEnBBDD = tematicaRepository.findById(tematica.getId()).get();
+		
+		assertFalse(tematicaEnBBDD.isActivo(), "No se ha conseguido dar de baja la temática");
+	}
+	
+	@Test
+	void testAlta() throws Exception{
+		Tematica tematica = tematicaRepository.save(generarTematica());
+		tematica.setActivo(false);
+		
+		tematicaRepository.save(tematica);
+		
+		MockHttpServletRequestBuilder request =
+				post("/api/tematica/alta/{id}", tematica.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+		Tematica tematicaEnBBDD = tematicaRepository.findById(tematica.getId()).get();
+		
+		assertTrue(tematicaEnBBDD.isActivo(), "No se ha conseguido dar de alta la temática");
+	}
+	
 	private Tematica generarTematica() {
 		Tematica tematica = new Tematica();
 
 		tematica.setNombre("Informática");
 		tematica.setDescripcion("Esta temática es de informática");
 		tematica.setSubtematicas("Big Data, Machine Learning");
+		tematica.setCategoria(Categoria.TECNOLOGIA);
+		tematica.setReferencia("REF-INF-TEC");
 		
 		return tematica;
 	}
@@ -214,7 +281,24 @@ class TematicaControllerIntegrationTest {
 		dto.setNombre("Informática");
 		dto.setDescripcion("Esta temática es de informática");
 		dto.setSubtematicas("Big Data, Machine Learning");
+		dto.setCategoria(Categoria.TECNOLOGIA);
+		dto.setReferencia("REF-INF-TEC");
 		
 		return dto;
+	}
+	
+	private Curso generarCurso(Tematica tematica) {
+		Curso curso = new Curso();
+		
+		curso.setNombre("Big data en analítica");
+		curso.setDescripcion("Un curso de big data");
+		curso.setCantidadAlumnos(30);
+		curso.setNumeroTemas(12);
+		curso.setDuracion(600);
+		curso.setCertificacion(true);
+		curso.setPrecio(new BigDecimal("35.60"));
+		curso.setTematica(tematica);
+		
+		return curso;
 	}
 }

@@ -13,12 +13,22 @@ import es.cic.bootcamp.individual06final.model.Tematica;
 @Component
 public class TematicaHelper {
 
+	public TematicaDto entityToDto(Tematica tematica, boolean eliminable) {
+		TematicaDto dto = entityToDto(tematica);
+		dto.setEliminable(eliminable);
+		
+		
+		return dto;
+	}
+	
 	public TematicaDto entityToDto(Tematica tematica) {
 		TematicaDto dto = new TematicaDto();
 		dto.setId(tematica.getId());
 		dto.setDescripcion(dto.getDescripcion());
 		dto.setSubtematicas(tematica.getSubtematicas());
 		dto.setActivo(tematica.isActivo());
+		dto.setCategoria(tematica.getCategoria());
+		dto.setReferencia(tematica.getReferencia());
 		
 		List<String> listaSubtematicas = new ArrayList<>();
 		
@@ -38,6 +48,8 @@ public class TematicaHelper {
 		tematica.setNombre(dto.getNombre());
 		tematica.setDescripcion(dto.getDescripcion());
 		tematica.setActivo(dto.isActivo());
+		tematica.setCategoria(dto.getCategoria());
+		tematica.setReferencia(dto.getReferencia());
 		
 		StringBuilder subtematicas = listarSubtematicas(dto);
 		

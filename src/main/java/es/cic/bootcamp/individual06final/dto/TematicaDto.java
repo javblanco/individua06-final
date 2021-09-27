@@ -3,9 +3,14 @@ package es.cic.bootcamp.individual06final.dto;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+
+import es.cic.bootcamp.individual06final.enumeration.Categoria;
 
 public class TematicaDto {
 
@@ -24,6 +29,13 @@ public class TematicaDto {
 	boolean eliminable;
 	
 	boolean activo;
+	
+	@NotNull
+	@Length(min = 5, max = 20)
+	private String referencia;
+	
+	@Enumerated(EnumType.STRING)
+	private Categoria categoria;
 	
 	public TematicaDto() {
 		this.activo = true;
@@ -75,11 +87,28 @@ public class TematicaDto {
 	}
 	
 	
+	public String getReferencia() {
+		return referencia;
+	}
+
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	@Override
 	public String toString() {
-		return "TematicaDto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", subtematicas="
-				+ subtematicas + "]";
+		return "TematicaDto [nombre=" + nombre + ", descripcion=" + descripcion + ", subtematicas=" + subtematicas
+				+ ", referencia=" + referencia + ", categoria=" + categoria + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

@@ -117,7 +117,7 @@ public class CursoService {
 				
 				cursoRepository.save(curso);
 			} else {
-				LOGGER.info("El cusrso ya se encontraba en estado de baja.");
+				LOGGER.info("El curso ya se encontraba en estado de baja.");
 				throw new CursoException("El curso ya estaba dado de baja");
 			}
 		} else {
@@ -134,7 +134,7 @@ public class CursoService {
 			Curso curso = optional.get();
 			
 			if(curso.isActivo()) {
-				LOGGER.info("El cusrso ya se encontraba en estado de alta.");
+				LOGGER.info("El curso ya se encontraba en estado de alta.");
 				throw new CursoException("El curso ya está dado de alta");				
 			} else {
 				LOGGER.info("Se ha dado de alta el curso");

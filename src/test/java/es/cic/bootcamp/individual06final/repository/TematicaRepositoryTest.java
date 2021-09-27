@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import es.cic.bootcamp.individual06final.enumeration.Categoria;
 import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
 
@@ -119,6 +120,26 @@ class TematicaRepositoryTest {
 		
 		assertNull(tematicaEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
 	}
+	
+	@Test
+	void findAllByActivoTrue() {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		Tematica tematica3 = generarTematica();
+		
+		entityManager.persist(tematica1);
+		entityManager.persist(tematica2);
+		entityManager.persistAndFlush(tematica3);
+		
+		tematica1.setActivo(false);
+		entityManager.merge(tematica1);
+		
+		List<Tematica> tematicasActivas = tematicaRepository.findAllByActivoTrue();
+		
+		assertThat(tematica1)
+		.isNotIn(tematicasActivas);
+		
+	}
 
 	
 	
@@ -128,6 +149,8 @@ class TematicaRepositoryTest {
 		tematica.setNombre("Informática");
 		tematica.setDescripcion("Esta temática es de informática");
 		tematica.setSubtematicas("Big Data, Machine Learning");
+		tematica.setCategoria(Categoria.TECNOLOGIA);
+		tematica.setReferencia("REF-INF-TEC");
 		
 		return tematica;
 	}
