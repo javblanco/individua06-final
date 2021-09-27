@@ -13,6 +13,14 @@ import es.cic.bootcamp.individual06final.model.Tematica;
 @Component
 public class TematicaHelper {
 
+	public TematicaDto entityToDto(Tematica tematica, boolean eliminable) {
+		TematicaDto dto = entityToDto(tematica);
+		dto.setEliminable(eliminable);
+		
+		
+		return dto;
+	}
+	
 	public TematicaDto entityToDto(Tematica tematica) {
 		TematicaDto dto = new TematicaDto();
 		dto.setId(tematica.getId());

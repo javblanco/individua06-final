@@ -135,6 +135,26 @@ class CursoRepositoryTest {
 		
 		assertNull(cursoEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
 	}
+	
+	@Test
+	void testExistsByTematicaId() {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		
+		entityManager.persist(tematica1);
+		entityManager.persistAndFlush(tematica2);
+		
+		Curso curso1 = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso1);
+		Curso curso2 = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso2);
+		
+		boolean existe = cursoRepository.existsByTematicaId(tematica2.getId());
+		boolean noExiste = cursoRepository.existsByTematicaId(tematica1.getId());
+		
+		assertTrue(existe);
+		assertFalse(noExiste);
+	}
 
 	
 	private Curso generarCurso(Tematica tematica) {
