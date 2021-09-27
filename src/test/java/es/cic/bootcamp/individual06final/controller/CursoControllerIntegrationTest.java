@@ -190,6 +190,50 @@ class CursoControllerIntegrationTest {
 		
 	}
 	
+	@Test
+	void testBaja() throws Exception{
+		Tematica tematica = tematicaRepository.save(generarTematica());
+		Curso curso = generarCurso(tematica);
+		
+		cursoRepository.save(curso);
+		
+		MockHttpServletRequestBuilder request =
+				post("/api/curso/baja/{id}", curso.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+		Curso cursoEnBBDD = cursoRepository.findById(curso.getId()).get();
+		
+		assertFalse(cursoEnBBDD.isActivo(), "No se ha conseguido dar de baja el curso");
+	}
+	
+	@Test
+	void testAlta() throws Exception{
+		Tematica tematica = tematicaRepository.save(generarTematica());
+		Curso curso = generarCurso(tematica);
+		
+		cursoRepository.save(curso);
+		curso.setActivo(false);
+		cursoRepository.save(curso);
+		
+		MockHttpServletRequestBuilder request =
+				post("/api/curso/alta/{id}", curso.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isOk());
+		
+		Curso cursoEnBBDD = cursoRepository.findById(curso.getId()).get();
+		
+		assertTrue(cursoEnBBDD.isActivo(), "No se ha conseguido dar de alta el curso");
+	}
+	
 	private CursoDto generarCursoDto(Tematica tematica) {
 		CursoDto dto = new CursoDto();
 		

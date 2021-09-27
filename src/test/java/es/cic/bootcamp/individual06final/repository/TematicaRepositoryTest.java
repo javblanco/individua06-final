@@ -3,6 +3,7 @@ package es.cic.bootcamp.individual06final.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
 
 @DataJpaTest
@@ -118,6 +120,23 @@ class TematicaRepositoryTest {
 		assertNull(tematicaEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
 	}
 
+	@Test
+	void existsCursoByTematicaId() {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		
+		entityManager.persist(tematica1);
+		entityManager.persistAndFlush(tematica2);
+		
+		Curso curso = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso);
+		
+		boolean existe = tematicaRepository.existsCursoById(tematica2.getId());
+		boolean noExiste = tematicaRepository.existsCursoById(tematica1.getId());
+		
+		assertTrue(existe);
+		assertFalse(noExiste);
+	}
 	
 	private Tematica generarTematica() {
 		Tematica tematica = new Tematica();
@@ -127,6 +146,21 @@ class TematicaRepositoryTest {
 		tematica.setSubtematicas("Big Data, Machine Learning");
 		
 		return tematica;
+	}
+	
+	private Curso generarCurso(Tematica tematica) {
+		Curso curso = new Curso();
+		
+		curso.setNombre("Big data en analítica");
+		curso.setDescripcion("Un curso de big data");
+		curso.setCantidadAlumnos(30);
+		curso.setNumeroTemas(12);
+		curso.setDuracion(600);
+		curso.setCertificacion(true);
+		curso.setPrecio(new BigDecimal("35.60"));
+		curso.setTematica(tematica);
+		
+		return curso;
 	}
 
 }
