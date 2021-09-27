@@ -3,6 +3,7 @@ package es.cic.bootcamp.individual06final.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
 
 @DataJpaTest
@@ -119,6 +121,7 @@ class TematicaRepositoryTest {
 	}
 
 	
+	
 	private Tematica generarTematica() {
 		Tematica tematica = new Tematica();
 
@@ -128,5 +131,7 @@ class TematicaRepositoryTest {
 		
 		return tematica;
 	}
+	
+
 
 }
