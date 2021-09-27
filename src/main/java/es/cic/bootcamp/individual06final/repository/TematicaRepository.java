@@ -7,5 +7,4 @@ import es.cic.bootcamp.individual06final.model.Tematica;
 
 public interface TematicaRepository extends CrudRepository<Tematica, Long> {
 
-	public boolean existsCursoById(@Param(value = "id") Long id);
 }
