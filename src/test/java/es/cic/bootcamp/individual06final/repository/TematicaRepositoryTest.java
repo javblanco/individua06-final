@@ -120,23 +120,7 @@ class TematicaRepositoryTest {
 		assertNull(tematicaEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
 	}
 
-	@Test
-	void existsCursoByTematicaId() {
-		Tematica tematica1 = generarTematica();
-		Tematica tematica2 = generarTematica();
-		
-		entityManager.persist(tematica1);
-		entityManager.persistAndFlush(tematica2);
-		
-		Curso curso = generarCurso(tematica2);
-		entityManager.persistAndFlush(curso);
-		
-		boolean existe = tematicaRepository.existsCursoById(tematica2.getId());
-		boolean noExiste = tematicaRepository.existsCursoById(tematica1.getId());
-		
-		assertTrue(existe);
-		assertFalse(noExiste);
-	}
+	
 	
 	private Tematica generarTematica() {
 		Tematica tematica = new Tematica();
@@ -148,19 +132,6 @@ class TematicaRepositoryTest {
 		return tematica;
 	}
 	
-	private Curso generarCurso(Tematica tematica) {
-		Curso curso = new Curso();
-		
-		curso.setNombre("Big data en analítica");
-		curso.setDescripcion("Un curso de big data");
-		curso.setCantidadAlumnos(30);
-		curso.setNumeroTemas(12);
-		curso.setDuracion(600);
-		curso.setCertificacion(true);
-		curso.setPrecio(new BigDecimal("35.60"));
-		curso.setTematica(tematica);
-		
-		return curso;
-	}
+
 
 }
