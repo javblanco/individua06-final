@@ -1,0 +1,86 @@
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Curso</h1>
+    </div>
+  </div>
+
+  <div class="container border rounded-sm border-black-50 p-3 bg-light mb-5">
+  <form class="form-group" [formGroup]="cursoForm">
+
+    <div class="form-group">
+      <label for="curso-nombre">Nombre:</label>
+      <input class="form-control" id="curso-nombre" type="text" formControlName="nombre">
+
+    </div>
+      <div class="form-group">
+      <label for="curso-desc">Descripción:</label>
+      <textarea class="form-control" id="curso-desc" formControlName="descripcion"></textarea>
+</div>
+      <div class="form-group">
+      <label for="curso-cat">Temática:</label>
+      <select id="curso-cat" class="form-control" formControlName="tematicas">
+        <option [value]="null" selected disabled>
+            Seleccione una opción
+        </option>
+        <option *ngFor="let tematica of tematicas" [value]="tematica.id">
+            {{tematica.nombre | titlecase}}
+        </option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col">
+      <label for="curso-duracion">Duración :</label>
+      <div class="input-group">
+        <input class="form-control" id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
+        <div class="input-group-append">
+          <span class="input-group-text" id="curso-precio-hora">h</span>
+        </div>
+        </div>
+    </div>
+    <div class="form-group col">
+      <label for="curso-alumnos">Alumnos :</label>
+        <input class="form-control" id="curso-alumnos" type="number" formControlName="cantidadAlumnos">
+    </div>
+  </div>  
+
+  <div class="form-row">
+    <div class="form-group col">
+      <label for="curso-temas">Temas :</label>
+        <input class="form-control" id="curso-temas" type="number" formControlName="numeroTemas">
+    </div>
+    <div class="form-group col">
+      <label for="curso-precio">Precio :</label>
+      <div class="input-group">
+        <input class="form-control" id="curso-precio" type="number" formControlName="precio" aria-describedby="curso-precio-moneda">
+        <div class="input-group-append">
+          <span class="input-group-text" id="curso-precio-moneda">€</span>
+        </div>
+    </div>
+    </div>
+  </div>   
+
+  <div class="form-row">
+    <div class="form-group col-2">
+      <label for="curso-certificado">Certificación :</label>
+    </div>
+    <div class="form-group col-10">
+        <input class="form-check-input" id="curso-certificado" type="checkbox" formControlName="certificacion">
+    </div>
+  </div>  
+    <div class="alert alert-success" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" *ngIf="mensajeError">{{mensajeError}}</div>
+
+    <div class="clearfix">
+    <div class="float-left">
+      <button class="btn btn-secondary" id="boton-curso-salir" (click)="salir()">Salir</button>
+    </div>
+
+    <div class="float-right">
+      <button class="btn btn-primary" id="boton-curso-guardar" (click)="guardar()">Guardar</button>
+    </div>
+  </div>
+  </form>
+</div>
+

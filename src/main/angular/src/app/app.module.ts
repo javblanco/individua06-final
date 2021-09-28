@@ -15,6 +15,8 @@ import { ModalSalirComponent } from './modal/modal-salir/modal-salir.component';
 import { TematicaMaestroComponent } from './components/tematica-maestro/tematica-maestro.component';
 import { TematicaDetalleComponent } from './components/tematica-detalle/tematica-detalle.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CursoMaestroComponent } from './components/curso-maestro/curso-maestro.component';
+import { CursoDetalleComponent } from './components/curso-detalle/curso-detalle.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     ModalAltaComponent,
     ModalSalirComponent,
     TematicaMaestroComponent,
-    TematicaDetalleComponent
+    TematicaDetalleComponent,
+    CursoMaestroComponent,
+    CursoDetalleComponent
   ],
   imports: [
     BrowserModule,
