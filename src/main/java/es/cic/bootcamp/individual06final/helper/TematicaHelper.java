@@ -24,7 +24,8 @@ public class TematicaHelper {
 	public TematicaDto entityToDto(Tematica tematica) {
 		TematicaDto dto = new TematicaDto();
 		dto.setId(tematica.getId());
-		dto.setDescripcion(dto.getDescripcion());
+		dto.setNombre(tematica.getNombre());
+		dto.setDescripcion(tematica.getDescripcion());
 		dto.setSubtematicas(tematica.getSubtematicas());
 		dto.setActivo(tematica.isActivo());
 		dto.setCategoria(tematica.getCategoria());
@@ -32,8 +33,8 @@ public class TematicaHelper {
 		
 		List<String> listaSubtematicas = new ArrayList<>();
 		
-		if(tematica.getSubtematicas() != null) {
-			listaSubtematicas = Arrays.asList(tematica.getSubtematicas().split(","));
+		if(tematica.getSubtematicas() != null ) {
+			listaSubtematicas = Arrays.asList(tematica.getSubtematicas().split(", "));
 		}
 		
 		dto.setListaSubtematicas(listaSubtematicas);
@@ -71,7 +72,7 @@ public class TematicaHelper {
 	private StringBuilder listarSubtematicas(TematicaDto dto) {
 		StringBuilder subtematicas = new StringBuilder();
 		
-		if(dto.getListaSubtematicas() != null) {
+		if(dto.getListaSubtematicas() != null && !dto.getListaSubtematicas().isEmpty()) {
 			dto.getListaSubtematicas()
 			.forEach(s -> subtematicas.append(String.format("%s, ", s)));
 			
