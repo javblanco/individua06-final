@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -141,6 +142,41 @@ class TematicaRepositoryTest {
 		
 	}
 
+	@Test
+	void testFindAllWithEliminable() {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		
+		entityManager.persist(tematica1);
+		entityManager.persistAndFlush(tematica2);
+		
+		Curso curso1 = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso1);
+		Curso curso2 = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso2);
+
+		List<Object[]> resultado = tematicaRepository.findAllWithEliminable();
+
+		List<Tematica> tematicasEliminable = 
+		resultado.stream()
+		.map(o -> (boolean) o[1] ? (Tematica) o[0] : null)
+		.filter(t -> t != null)
+		.collect(Collectors.toList());
+
+		List<Tematica> tematicasNoEliminable = 
+		resultado.stream()
+		.map(o -> (boolean) o[1] ? null : (Tematica) o[0])
+		.filter(t -> t != null)
+		.collect(Collectors.toList());
+
+		
+		assertThat(tematica1)
+		.isIn(tematicasEliminable);
+
+		assertThat(tematica1)
+		.isNotIn(tematicasNoEliminable);
+
+	}
 	
 	
 	private Tematica generarTematica() {
@@ -156,5 +192,19 @@ class TematicaRepositoryTest {
 	}
 	
 
+	private Curso generarCurso(Tematica tematica) {
+		Curso curso = new Curso();
+		
+		curso.setNombre("Big data en analítica");
+		curso.setDescripcion("Un curso de big data");
+		curso.setCantidadAlumnos(30);
+		curso.setNumeroTemas(12);
+		curso.setDuracion(600);
+		curso.setCertificacion(true);
+		curso.setPrecio(new BigDecimal("35.60"));
+		curso.setTematica(tematica);
+		
+		return curso;
+	}
 
 }

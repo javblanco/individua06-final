@@ -62,16 +62,9 @@ public class TematicaService {
 
 
 	public List<TematicaDto> list() {
-		List<Tematica> lista = new ArrayList<>();
+		List<Object[]> lista = tematicaRepository.findAllWithEliminable();
 		
-		tematicaRepository
-		.findAll()
-		.forEach(lista::add);
-		LOGGER.info("Listado de temáticas");
-		
-		return  lista.stream()
-				.map(t -> tematicaHelper.entityToDto(t, this.isEliminable(t.getId())))
-				.collect(Collectors.toList());
+		return  tematicaHelper.listEntityToListDtoElimnable(lista);
 	}
 	
 	public void update(TematicaDto dto) {

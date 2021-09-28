@@ -87,4 +87,10 @@ public class TematicaHelper {
 				.map(t -> this.entityToDto(t))
 				.collect(Collectors.toList());
 	}
+
+	public List<TematicaDto> listEntityToListDtoElimnable(List<Object[]> lista) {
+		return lista.stream()
+				.map(t -> this.entityToDto((Tematica) t[0], (boolean) t[1]))
+				.collect(Collectors.toList());
+	}
 }
