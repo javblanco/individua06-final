@@ -1,0 +1,23 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs bg-dark p-2">
+    <li ngbNavItem>
+        <a ngbNavLink routerLink="/index" class="btn bg-dark border-dark text-light">Aprendix</a>
+    </li> 
+    <li ngbNavItem>
+        <div class="d-inline-block" ngbDropdown #dropTematica="ngbDropdown">
+            <button class="btn mr-2  text-light" id="dropdown-tematica" ngbDropdownAnchor (focus)="dropTematica.open()">Temática</button>
+            <div ngbDropdownMenu aria-labelledby="dropdown-tematical">
+              <a ngbDropdownItem>Listado</a>
+              <a ngbDropdownItem>Crear</a>
+            </div>
+          </div>
+    </li>
+    <li ngbNavItem>
+        <div class="d-inline-block" ngbDropdown #dropCurso="ngbDropdown">
+            <button class="btn mr-2  text-light" id="dropdown-cursos" ngbDropdownAnchor (focus)="dropCurso.open()">Cursos</button>
+            <div ngbDropdownMenu aria-labelledby="dropdown-cursos">
+              <a ngbDropdownItem>Listado</a>
+              <a ngbDropdownItem>Crear</a>
+            </div>
+          </div>
+    </li>
+</ul>
