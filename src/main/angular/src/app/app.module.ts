@@ -17,6 +17,7 @@ import { TematicaDetalleComponent } from './components/tematica-detalle/tematica
 import { ReactiveFormsModule } from '@angular/forms';
 import { CursoMaestroComponent } from './components/curso-maestro/curso-maestro.component';
 import { CursoDetalleComponent } from './components/curso-detalle/curso-detalle.component';
+import { ValidarNumerosDirective } from './validation/validar-numeros.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { CursoDetalleComponent } from './components/curso-detalle/curso-detalle.
     TematicaMaestroComponent,
     TematicaDetalleComponent,
     CursoMaestroComponent,
-    CursoDetalleComponent
+    CursoDetalleComponent,
+    ValidarNumerosDirective
   ],
   imports: [
     BrowserModule,

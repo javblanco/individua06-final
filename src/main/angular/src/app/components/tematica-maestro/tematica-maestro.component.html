@@ -12,7 +12,6 @@
                 <th>Referencia</th>
                 <th>Categoría</th>
                 <th>Subtemáticas</th>
-                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -23,12 +22,11 @@
                 <td>{{tematica.referencia}}</td>
                 <td>{{tematica.categoria}}</td>
                 <td>{{tematica.subtematicas}}</td>
-                <td>{{tematica.activo}}</td>
                 <td><a class="btn btn-info mr-1 mb-1" id="boton-ver-tematica" (click)="ver()" routerLink="../{{tematica.id}}">Ver</a>
                     <a class="btn btn-primary mr-1 mb-1" id="boton-modificar-tematica" routerLink="../{{tematica.id}}">Modificar</a>
-                    <button class="btn btn-danger mr-1 mb-1" *ngIf="tematica.eliminable" id="boton-eliminar-tematica" (click)="eliminar(tematica)">Eliminar</button>
                     <button class="btn btn-warning mr-1 mb-1" *ngIf="tematica.activo" id="boton-baja-tematica" (click)="baja(tematica)">Baja</button>
                     <button class="btn btn-success mr-1 mb-1" *ngIf="!tematica.activo" id="boton-alta-tematica" (click)="alta(tematica)">Alta</button>
+                    <button class="btn btn-danger mr-1 mb-1" *ngIf="tematica.eliminable" id="boton-eliminar-tematica" (click)="eliminar(tematica)">Eliminar</button>
                 </td>
             </tr>
         </tbody>

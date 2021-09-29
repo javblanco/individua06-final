@@ -21,9 +21,10 @@
             <tr *ngFor="let curso of cursos">
                 <td>{{curso.nombre}}</td>
                 <td>{{curso.nombreTematica}}</td>
-                <td>{{curso.duracion}}</td>
-                <td>{{curso.certificacion}}</td>
-                <td>{{curso.precio}}</td>
+                <td>{{curso.duracion}} horas</td>
+                <td><input type="checkbox" [checked]="curso.certificacion" disabled/></td>
+                <td><span *ngIf="curso.precio">{{curso.precio}} €</span>
+                    <span *ngIf="!curso.precio">Gratuito</span></td>
                 <td><a class="btn btn-info mr-1 mb-1" id="boton-ver-curso" (click)="ver()" routerLink="../{{curso.id}}">Ver</a>
                     <a class="btn btn-primary mr-1 mb-1" id="boton-modificar-curso" routerLink="../{{curso.id}}">Modificar</a>
                     <button class="btn btn-warning mr-1 mb-1" *ngIf="curso.activo" id="boton-baja-curso" (click)="baja(curso)">Baja</button>

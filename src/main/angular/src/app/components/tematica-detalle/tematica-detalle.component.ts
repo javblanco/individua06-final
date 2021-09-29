@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalGuardarComponent } from 'src/app/modal/modal-guardar/modal-guardar.component';
@@ -22,9 +22,9 @@ export class TematicaDetalleComponent implements OnInit {
 
   tematicaForm = this.fb.group({
     id: [''],
-    nombre: [''],
-    referencia: [''],
-    descripcion: [''],
+    nombre: ['', [Validators.required, Validators.maxLength(50)]],
+    referencia: ['', [Validators.required, Validators.maxLength(50)]],
+    descripcion: ['', [Validators.maxLength(1000)]],
     categoria: [undefined, Categoria],
     subtematica: ['']
   });
@@ -46,6 +46,12 @@ export class TematicaDetalleComponent implements OnInit {
   ngOnInit(): void {
     this.getTematica();
   }
+
+  get nombre() {return this.tematicaForm.get('nombre');}
+  get descripcion() {return this.tematicaForm.get('descripcion');}
+  get referencia() {return this.tematicaForm.get('referencia');}
+
+
 
   getTematica(): void {
     const id = Number(this.routes.snapshot.paramMap.get('id'));
@@ -92,18 +98,24 @@ export class TematicaDetalleComponent implements OnInit {
   }
 
   guardar(): void {
-    this.modalService.open(ModalGuardarComponent)
-    .result.then(
-      () => {
-        this.tematica = this.tematicaForm.value;
-        this.tematica.listaSubtematicas = this.listaSubtematicas;
-        if(this.tematica.id) {
-          this.modificar();
-        } else {
-          this.crear();
+    if(this.tematicaForm.valid){
+      this.modalService.open(ModalGuardarComponent)
+      .result.then(
+        () => {
+          this.tematica = this.tematicaForm.value;
+          this.tematica.listaSubtematicas = this.listaSubtematicas;
+          if(this.tematica.id) {
+            this.modificar();
+          } else {
+            this.crear();
+          }
         }
-      }
-    );
+      );
+    } else {
+      this.mensajeError = 'Compruebe que haya rellenado el formulario correctamente.';
+    }
+
+   
   }
 
   salir(): void {

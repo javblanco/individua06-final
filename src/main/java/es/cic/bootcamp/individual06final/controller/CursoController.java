@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +34,7 @@ public class CursoController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public Long create(@RequestBody CursoDto dto) {
+	public Long create(@Valid @RequestBody CursoDto dto) {
 		LOGGER.info("Método post de /api/curso. Creación de un nuevo curso");
 		return cursoService.create(dto);
 	}
@@ -50,7 +52,7 @@ public class CursoController {
 	}
 	
 	@PutMapping
-	public void update(@RequestBody CursoDto dto) {
+	public void update(@Valid @RequestBody CursoDto dto) {
 		LOGGER.info("Método put de /api/curso. Modificación de un curso");
 		cursoService.update(dto);
 	}
