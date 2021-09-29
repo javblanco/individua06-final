@@ -32,6 +32,13 @@
         </tbody>
       </table>
 
+      <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
+
       <div class="alert alert-secondary" *ngIf="!tematicas.length">Todavía no hay temáticas dadas de alta.</div>
       <div class="float-right"><a class="btn btn-primary" id="boton-nueva-tematica" routerLink="../">Nuevo</a></div>
+
+      
+
   </div>

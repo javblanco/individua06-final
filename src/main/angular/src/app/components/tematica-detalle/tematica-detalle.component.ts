@@ -80,7 +80,8 @@ export class TematicaDetalleComponent implements OnInit {
           this.listaSubtematicas = res.listaSubtematicas;
           this.setValue();
           }
-        })
+        },
+        err => this.mensajeError = err.message)
     }
   }
 
@@ -116,7 +117,6 @@ export class TematicaDetalleComponent implements OnInit {
   }
 
   guardar(): void {
-    if(this.tematicaForm.valid){
       this.modalService.open(ModalGuardarComponent)
       .result.then(
         () => {
@@ -129,9 +129,6 @@ export class TematicaDetalleComponent implements OnInit {
           }
         }
       );
-    } else {
-      this.mensajeError = 'Compruebe que haya rellenado el formulario correctamente.';
-    }
 
    
   }
@@ -150,22 +147,19 @@ export class TematicaDetalleComponent implements OnInit {
     .subscribe(() => {
       this.mensaje = 'Se ha actualizado la entrada.';
       this.mensajeError = '';
-    });
+    },
+    err => this.mensajeError = err.message);
   }
 
   crear(): void {
     this.tematicaService.createTematica(this.tematica)
     .subscribe(
       res =>{
-        try {
           this.tematica.id = res;
           this.mensaje = 'Se ha creado la entrada';
           this.mensajeError = '';
-        } catch (error) {
-          console.log(error)
-        }
-         
-      }
+      },
+      err => this.mensajeError = err.message
     );
   }
 }

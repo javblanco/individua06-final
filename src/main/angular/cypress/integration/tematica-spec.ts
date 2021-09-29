@@ -25,6 +25,7 @@ describe('Navegación en el listado, creación y actualización de temáticas', 
     cy.url().should('not.contain', 'list');
 
     cy.get('button#boton-tematica-guardar').click();
+    cy.get('button#modal-boton-guardar').click();
     cy.get('#mensaje-error').should('exist');
 
 

@@ -112,7 +112,6 @@ export class CursoDetalleComponent implements OnInit {
 
 
   guardar(): void {
-    if(this.cursoForm.valid) {
       this.modalService.open(ModalGuardarComponent)
       .result.then(
         () => {
@@ -125,9 +124,7 @@ export class CursoDetalleComponent implements OnInit {
           }
         }
       );
-    } else {
-      this.mensajeError = 'Compruebe que haya rellenado el formulario correctamente.';
-    }
+    
     
   }
 

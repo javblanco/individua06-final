@@ -11,6 +11,9 @@ import { CursoService } from 'src/app/service/curso.service';
 })
 export class CursoMaestroComponent implements OnInit {
 
+  mensajeError?: string;
+  mensaje?: string;
+
   cursos: Curso[] = [];
 
   constructor(private cursoService: CursoService,
@@ -26,7 +29,8 @@ export class CursoMaestroComponent implements OnInit {
   getCursos(): void {
     this.cursoService.getCursos()
       .subscribe(
-        res => this.cursos = res
+        res => {this.cursos = res},
+        err => this.mensajeError = err.message
       );
   }
 
@@ -42,7 +46,12 @@ export class CursoMaestroComponent implements OnInit {
         () => {
           if (curso.id) {
             this.cursoService.bajaCurso(curso.id)
-            .subscribe(() => curso.activo = false)
+            .subscribe(() => {
+              curso.activo = false;
+              this.mensaje = `Se ha dado de baja el curso: ${curso.nombre}`;
+              this.mensajeError = '';
+            },
+            err => this.mensajeError = err.message)
           }
         }
       );
@@ -55,7 +64,12 @@ export class CursoMaestroComponent implements OnInit {
         () => {
           if (curso.id) {
             this.cursoService.altaCurso(curso.id)
-            .subscribe(() => curso.activo = true)
+            .subscribe(() => {
+            curso.activo = true;
+            this.mensaje = `Se ha dado de alta el curso: ${curso.nombre}`;
+            this.mensajeError = '';
+            },
+            err => this.mensajeError = err.message)
           }
         }
       );
