@@ -150,9 +150,9 @@
         <input class="form-check-input" id="curso-certificado" type="checkbox" formControlName="certificacion">
     </div>
   </div>  
-    <div class="alert alert-success" *ngIf="mensaje">{{mensaje}}</div>
+    <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
 
-    <div class="alert alert-danger" *ngIf="mensajeError">{{mensajeError}}</div>
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
 
     <div class="clearfix">
     <div class="float-left">
@@ -160,7 +160,7 @@
     </div>
 
     <div class="float-right">
-      <button class="btn btn-primary" id="boton-curso-guardar" (click)="guardar()">Guardar</button>
+      <button class="btn btn-primary" id="boton-curso-guardar" (click)="guardar()" [disabled]="lectura">Guardar</button>
     </div>
   </div>
   </form>

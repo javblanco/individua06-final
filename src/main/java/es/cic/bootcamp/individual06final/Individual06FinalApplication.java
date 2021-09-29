@@ -24,9 +24,9 @@ public class Individual06FinalApplication {
   	public CommandLineRunner demo(TematicaRepository tematicaRepository, CursoRepository cursoRepository) {
 		  return args -> {
 			  Tematica tematica = generarTematica();
-			  tematicaRepository.save(tematica);
+			  Tematica tematicaSave = tematicaRepository.save(tematica);
 
-			  cursoRepository.save(generarCurso(tematica));
+			  cursoRepository.save(generarCurso(tematicaSave));
 		  };
 	}
 

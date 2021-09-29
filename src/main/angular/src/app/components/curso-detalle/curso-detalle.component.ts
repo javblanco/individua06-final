@@ -18,6 +18,8 @@ import { ValidarNumerosDirective } from 'src/app/validation/validar-numeros.dire
 })
 export class CursoDetalleComponent implements OnInit {
 
+  lectura = false;
+
   curso = <Curso> {};
   tematicas: Tematica[] = [];
 
@@ -50,6 +52,7 @@ export class CursoDetalleComponent implements OnInit {
   ngOnInit(): void {
     this.getTematicas();
     this.getCurso();
+    this.isLectura();
   }
 
   get nombre() {return this.cursoForm.get('nombre')};
@@ -60,7 +63,16 @@ export class CursoDetalleComponent implements OnInit {
   get numeroTemas() {return this.cursoForm.get('numeroTemas')};
   get precio() {return this.cursoForm.get('precio')};
 
-
+  isLectura(): void {
+    if(this.cursoService.fromVer) {
+      this.cursoService.fromVer = false;
+      this.lectura = this.cursoService.lectura;
+      if(this.lectura) {
+        this.cursoForm.disable();
+      }
+    }
+    
+  }
 
 
   getTematicas(): void {
@@ -100,7 +112,6 @@ export class CursoDetalleComponent implements OnInit {
 
 
   guardar(): void {
-    if(this.cursoForm.valid) {
       this.modalService.open(ModalGuardarComponent)
       .result.then(
         () => {
@@ -113,36 +124,39 @@ export class CursoDetalleComponent implements OnInit {
           }
         }
       );
-    } else {
-      this.mensajeError = 'Compruebe que haya rellenado el formulario correctamente.';
-    }
+    
     
   }
 
   salir(): void {
     this.modalService.open(ModalSalirComponent)
     .result.then(
-      () => this.location.back()
+      () => {
+        this.location.back();
+        this.cursoService.lectura = false;
+      }
     );
   }
 
   modificar(): void {
     this.cursoService.updateCurso(this.curso)
-    .subscribe(() => this.mensaje = "Se ha actualizado la entrada.");
+    .subscribe(() => {
+    this.mensaje = 'Se ha actualizado la entrada.';
+    this.mensajeError = '';
+    });
   }
 
   crear(): void {
     this.cursoService.createCurso(this.curso)
     .subscribe(
       res =>{
-        try {
           this.curso.id = res;
-          this.mensaje = "Se ha creado la entrada";
-        } catch (error) {
-          console.log(error)
+          this.mensaje = 'Se ha creado la entrada';
+          this.mensajeError = '';
+        },
+        err => {
+          this.mensajeError = err.message;
         }
-         
-      }
     );
   }
 

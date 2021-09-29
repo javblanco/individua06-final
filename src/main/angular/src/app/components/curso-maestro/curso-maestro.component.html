@@ -34,6 +34,10 @@
         </tbody>
       </table>
 
+      <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
+
       <div class="alert alert-secondary" *ngIf="!cursos.length">Todavía no hay cursos dados de alta.</div>
       <div class="float-right"><a class="btn btn-primary" id="boton-nueva-curso" routerLink="../">Nuevo</a></div>
   </div>

@@ -1,7 +1,7 @@
 export enum Categoria {
-    tecnonologia ='TECNOLOGIA',
+    tecnonologia ='TECNOLOGÍA',
     ciencias =  'CIENCIAS', 
-    filosofia = 'FILOSOFIA',
+    filosofia = 'FILOSOFÍA',
     cocina =  'COCINA',
     otros = 'OTROS'
 }
