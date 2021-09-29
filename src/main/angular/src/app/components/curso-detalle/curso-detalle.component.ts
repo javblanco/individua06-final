@@ -150,15 +150,13 @@ export class CursoDetalleComponent implements OnInit {
     this.cursoService.createCurso(this.curso)
     .subscribe(
       res =>{
-        try {
           this.curso.id = res;
           this.mensaje = 'Se ha creado la entrada';
           this.mensajeError = '';
-        } catch (error) {
-          console.log(error)
+        },
+        err => {
+          this.mensajeError = err.message;
         }
-         
-      }
     );
   }
 

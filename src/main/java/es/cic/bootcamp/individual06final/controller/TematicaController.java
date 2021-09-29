@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +34,7 @@ public class TematicaController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public Long create(@RequestBody TematicaDto dto) {		
+	public Long create(@Valid @RequestBody TematicaDto dto) {		
 		LOGGER.info("Método post de /api/tematica. Creación de una nueva temática");
 
 		return tematicaService.create(dto);
@@ -51,7 +53,7 @@ public class TematicaController {
 	}
 	
 	@PutMapping
-	public void update(@RequestBody TematicaDto dto) {
+	public void update(@Valid @RequestBody TematicaDto dto) {
 		LOGGER.log(Level.INFO, "Método put de /api/tematica. Modificación de una temática");
 		tematicaService.update(dto);
 	}

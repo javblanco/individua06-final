@@ -4,43 +4,62 @@ package es.cic.bootcamp.individual06final.controller;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import es.cic.bootcamp.individual06final.exception.CursoException;
 import es.cic.bootcamp.individual06final.exception.TematicaException;
+import io.micrometer.core.lang.Nullable;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class RestResponseEntityExceptionHandler 
-  extends ResponseEntityExceptionHandler {
+   {
+
+    
+    @ExceptionHandler(value 
+      = {MethodArgumentNotValidException.class})
+      public ResponseEntity<Object> handleMethodArgumentNotValidException(
+      MethodArgumentNotValidException ex, WebRequest request) {
+        String bodyOfResponse = "No se ha podido realizar la operación. Los datos introducidos en el formulario no son correctos.";
+        return handleExceptionInternal(bodyOfResponse, 
+          new HttpHeaders(), HttpStatus.EXPECTATION_FAILED);
+    }
 
     @ExceptionHandler(value 
-      = {TransactionSystemException .class})
-    protected ResponseEntity<Object> handleValidaciones(
-      RuntimeException ex, WebRequest request) {
-        String bodyOfResponse = "No se han introducido los datos del registro correctamente.";
-        return handleExceptionInternal(ex, bodyOfResponse, 
-          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    = {HttpRequestMethodNotSupportedException.class})
+    public ResponseEntity<Object> handleHttpRequestMethodNotSupportedException(
+      HttpRequestMethodNotSupportedException ex, WebRequest request) {
+        String bodyOfResponse = "No se ha podido realizar la operación. Petición no implementada";
+        return handleExceptionInternal(bodyOfResponse, 
+          new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(value 
       = {TematicaException.class})
-    protected ResponseEntity<Object> handleTematicaException(
+      public ResponseEntity<Object> handleTematicaException(
       RuntimeException ex, WebRequest request) {
         String bodyOfResponse =  ex.getMessage();
-        return handleExceptionInternal(ex, bodyOfResponse, 
-          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(bodyOfResponse, 
+          new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value 
       = {CursoException.class})
-    protected ResponseEntity<Object> handleCursoException(
+    public ResponseEntity<Object> handleCursoException(
       RuntimeException ex, WebRequest request) {
         String bodyOfResponse =  ex.getMessage();
-        return handleExceptionInternal(ex, bodyOfResponse, 
-          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(bodyOfResponse, 
+          new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
+    private ResponseEntity<Object> handleExceptionInternal( @Nullable Object bodyOfResponse,
+        HttpHeaders httpHeaders, HttpStatus status) {
+
+      return  new ResponseEntity<>(bodyOfResponse, httpHeaders, status);
+    }
+
+    
 }
