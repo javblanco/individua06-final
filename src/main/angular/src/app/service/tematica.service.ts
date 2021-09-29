@@ -33,6 +33,13 @@ export class TematicaService {
       catchError(err => {throw new Error(err.error)})
     );
   }
+  getTematicasActivasConCursoId(id: number): Observable<Tematica[]> {
+    const urlActivas = `${this.url}/curso/${id}`;
+
+    return this.http.get<Tematica[]>(urlActivas).pipe(
+      catchError(err => {throw new Error(err.error)})
+    );
+  }
 
   getTematica(id: number): Observable<Tematica> {
     const urlId = `${this.url}/${id}`;

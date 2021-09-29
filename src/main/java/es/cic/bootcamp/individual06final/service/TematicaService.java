@@ -1,6 +1,5 @@
 package es.cic.bootcamp.individual06final.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -45,7 +44,8 @@ public class TematicaService {
 		LOGGER.info("Se ha dado de alta una nueva temática");
 		return tematicaRepository.save(tematica).getId();
 	}
-	
+
+	@Transactional(readOnly = true)
 	public TematicaDto read(Long id) {
 		Optional<Tematica> optional = tematicaRepository.findById(id);
 		
@@ -60,7 +60,7 @@ public class TematicaService {
 		}
 	}
 
-
+	@Transactional(readOnly = true)
 	public List<TematicaDto> list() {
 		List<Object[]> lista = tematicaRepository.findAllWithEliminable();
 		
@@ -146,12 +146,23 @@ public class TematicaService {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public List<TematicaDto> listActivos() {
 		List<Tematica> lista = tematicaRepository.findAllByActivoTrue();
 
 		LOGGER.info("Listado de temáticas activas");
 		return lista.stream()
 				.map(t -> tematicaHelper.entityToDto(t, this.isEliminable(t.getId())))
+				.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public List<TematicaDto> listActivosConCurso(Long id) {
+		List<Tematica> lista = tematicaRepository.findAllByActivoWithCursoId(id);
+
+		LOGGER.info("Listado de temáticas activas y la del curso actual");
+		return lista.stream()
+				.map(t -> tematicaHelper.entityToDto(t))
 				.collect(Collectors.toList());
 	}
 	

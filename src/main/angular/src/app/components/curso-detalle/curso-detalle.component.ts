@@ -76,8 +76,16 @@ export class CursoDetalleComponent implements OnInit {
 
 
   getTematicas(): void {
-    this.tematicaService.getTematicasActivas()
-    .subscribe(res => this.tematicas = res);
+    const id = Number(this.routes.snapshot.paramMap.get('id'));
+
+    if(id) {
+      this.tematicaService.getTematicasActivasConCursoId(id)
+      .subscribe(res => this.tematicas = res);
+    } else {
+      this.tematicaService.getTematicasActivas()
+      .subscribe(res => this.tematicas = res);
+    }
+    
   }
 
   getCurso(): void {
