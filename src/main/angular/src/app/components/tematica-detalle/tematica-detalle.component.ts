@@ -18,6 +18,8 @@ import { TematicaService } from 'src/app/service/tematica.service';
 })
 export class TematicaDetalleComponent implements OnInit {
 
+  lectura = false; 
+
   tematica = <Tematica> {};
   categorias = Object.values(Categoria);
 
@@ -46,6 +48,7 @@ export class TematicaDetalleComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTematica();
+    this.isLectura();
   }
 
   get nombre() {return this.tematicaForm.get('nombre');}
@@ -53,6 +56,16 @@ export class TematicaDetalleComponent implements OnInit {
   get referencia() {return this.tematicaForm.get('referencia');}
 
 
+  isLectura(): void {
+    if(this.tematicaService.fromVer) {
+      this.tematicaService.fromVer = false;
+      this.lectura = this.tematicaService.lectura;
+      if(this.lectura) {
+        this.tematicaForm.disable();
+      }
+    }
+    
+  }
 
   getTematica(): void {
     const id = Number(this.routes.snapshot.paramMap.get('id'));
@@ -126,13 +139,18 @@ export class TematicaDetalleComponent implements OnInit {
   salir(): void {
     this.modalService.open(ModalSalirComponent)
     .result.then(
-      () => this.location.back()
-    );
+      () => {
+        this.location.back();
+        this.tematicaService.lectura = false;
+      });
   }
 
   modificar(): void {
     this.tematicaService.updateTematica(this.tematica)
-    .subscribe(() => this.mensaje = "Se ha actualizado la entrada.");
+    .subscribe(() => {
+      this.mensaje = 'Se ha actualizado la entrada.';
+      this.mensajeError = '';
+    });
   }
 
   crear(): void {
@@ -141,7 +159,8 @@ export class TematicaDetalleComponent implements OnInit {
       res =>{
         try {
           this.tematica.id = res;
-          this.mensaje = "Se ha creado la entrada";
+          this.mensaje = 'Se ha creado la entrada';
+          this.mensajeError = '';
         } catch (error) {
           console.log(error)
         }

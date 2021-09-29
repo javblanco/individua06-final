@@ -20,6 +20,8 @@ export class TematicaMaestroComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTematicas();
+    this.tematicaService.lectura = false;
+    this.tematicaService.fromVer = false;
   }
 
   getTematicas(): void {
@@ -30,7 +32,8 @@ export class TematicaMaestroComponent implements OnInit {
   }
 
   ver(): void {
-
+    this.tematicaService.lectura = true;
+    this.tematicaService.fromVer = true;
   }
 
   eliminar(tematica: Tematica): void {

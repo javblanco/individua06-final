@@ -18,6 +18,9 @@ export class CursoMaestroComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCursos();
+
+    this.cursoService.lectura = false;
+    this.cursoService.fromVer = false;
   }
 
   getCursos(): void {
@@ -28,7 +31,8 @@ export class CursoMaestroComponent implements OnInit {
   }
 
   ver(): void {
-
+    this.cursoService.lectura = true;
+    this.cursoService.fromVer = true;
   }
 
   baja(curso: Curso): void {

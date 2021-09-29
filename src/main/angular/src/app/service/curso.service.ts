@@ -10,6 +10,9 @@ import { Curso } from '../model/curso';
 })
 export class CursoService {
 
+  lectura = false;
+  fromVer = false;
+  
   url = `${environment.host}/api/curso`;
 
   options = {

@@ -11,7 +11,9 @@ import { Tematica } from '../model/tematica';
   providedIn: 'root'
 })
 export class TematicaService {
-
+  lectura = false;
+  fromVer = false;
+  
   url = `${environment.host}/api/tematica`;
 
   options = {

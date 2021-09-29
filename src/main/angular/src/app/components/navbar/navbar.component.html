@@ -6,8 +6,8 @@
         <div class="d-inline-block" ngbDropdown #dropTematica="ngbDropdown">
             <button class="btn mr-2  text-light" id="dropdown-tematica" ngbDropdownAnchor (focus)="dropTematica.open()">Temática</button>
             <div ngbDropdownMenu aria-labelledby="dropdown-tematica">
-              <a ngbDropdownItem routerLink="./tematica/list">Listado</a>
-              <a ngbDropdownItem routerLink="./tematica">Crear</a>
+              <a ngbDropdownItem id="tematica-listado" routerLink="./tematica/list">Listado</a>
+              <a ngbDropdownItem id="tematica-crear" routerLink="./tematica">Crear</a>
             </div>
           </div>
     </li>
@@ -15,8 +15,8 @@
         <div class="d-inline-block" ngbDropdown #dropCurso="ngbDropdown">
             <button class="btn mr-2  text-light" id="dropdown-cursos" ngbDropdownAnchor (focus)="dropCurso.open()">Cursos</button>
             <div ngbDropdownMenu aria-labelledby="dropdown-cursos">
-              <a ngbDropdownItem routerLink="./curso/list">Listado</a>
-              <a ngbDropdownItem routerLink="./curso">Crear</a>
+              <a ngbDropdownItem id="curso-listado" routerLink="./curso/list">Listado</a>
+              <a ngbDropdownItem id="curso-crear" routerLink="./curso">Crear</a>
             </div>
           </div>
     </li>
