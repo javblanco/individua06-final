@@ -9,7 +9,7 @@
 
     <div class="form-group">
       <label for="curso-nombre">Nombre:</label>
-      <input class="form-control" id="curso-nombre" type="text" formControlName="nombre">
+      <input class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" id="curso-nombre" type="text" formControlName="nombre">
       
     </div>
     <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
@@ -34,7 +34,7 @@
   </div>
       <div class="form-group">
       <label for="curso-tem">Temática:</label>
-      <select id="curso-tem" class="form-control" formControlName="tematicas" required>
+      <select id="curso-tem" class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" formControlName="tematicas" required>
         <option [value]="null" selected disabled>
             Seleccione una opción
         </option>
@@ -52,9 +52,9 @@
 </div>
   <div class="form-row">
     <div class="form-group col-12 col-md-6">
-      <label for="curso-duracion">Duración :</label>
-      <div class="input-group">
-        <input class="form-control" id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
+      <label for="curso-duracion">Duración:</label>
+      <div class="input-group" [ngClass]="{'border rounded border-danger': duracion?.invalid}">
+        <input class="form-control"  id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
         <div class="input-group-append">
           <span class="input-group-text" id="curso-precio-hora">h</span>
         </div>

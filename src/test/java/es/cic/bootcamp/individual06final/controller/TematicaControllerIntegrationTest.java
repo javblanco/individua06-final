@@ -262,6 +262,92 @@ class TematicaControllerIntegrationTest {
 		
 		assertTrue(tematicaEnBBDD.isActivo(), "No se ha conseguido dar de alta la temática");
 	}
+
+	@Test
+	void testListActivos() throws Exception {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		Tematica tematica3 = generarTematica();
+		Tematica tematica4 = generarTematica();
+		
+		List<Tematica> lista = List.of(tematica1, tematica2, tematica3, tematica4);
+		tematicaRepository.saveAll(lista);
+
+		tematica2.setActivo(false);
+		tematicaRepository.save(tematica2);
+		
+		
+		List<TematicaDto> dtos = tematicaHelper.listEntityToListDto(List.of(tematica1, tematica3, tematica4));
+		
+		MockHttpServletRequestBuilder request =
+				get("/api/tematica/activos")
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		MvcResult result = mvc.perform(request)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$",hasSize(greaterThanOrEqualTo(2))))
+				.andReturn();
+		
+		String resultado = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+		
+		List<TematicaDto> dtoResultado = mapper.readValue(resultado, new TypeReference<List<TematicaDto>>(){});
+		
+		assertThat(dtoResultado)
+		.containsAnyElementsOf(dtos);
+
+		assertThat(tematicaHelper.entityToDto(tematica2))
+		.isNotIn(dtoResultado);
+	}
+
+	@Test
+	void testListActivosConCursoActual() throws Exception {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		Tematica tematica3 = generarTematica();
+		Tematica tematica4 = generarTematica();
+		
+		List<Tematica> lista = List.of(tematica1, tematica2, tematica3, tematica4);
+		tematicaRepository.saveAll(lista);
+
+		Curso curso = generarCurso(tematica3);
+		cursoRepository.save(curso);
+
+		tematica2.setActivo(false);
+		tematicaRepository.save(tematica2);
+		tematica2.setActivo(false);
+		tematicaRepository.save(tematica3);
+		
+		
+		List<TematicaDto> dtos = tematicaHelper.listEntityToListDto(List.of(tematica1, tematica3, tematica4));
+		
+		MockHttpServletRequestBuilder request =
+				get("/api/tematica/curso/{id}", curso.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON);
+		
+		MvcResult result = mvc.perform(request)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$",hasSize(greaterThanOrEqualTo(2))))
+				.andReturn();
+		
+		String resultado = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+		
+		List<TematicaDto> dtoResultado = mapper.readValue(resultado, new TypeReference<List<TematicaDto>>(){});
+		
+		assertThat(dtoResultado)
+		.containsAnyElementsOf(dtos);
+
+		assertThat(tematicaHelper.entityToDto(tematica2))
+		.isNotIn(dtoResultado);
+
+		assertThat(tematicaHelper.entityToDto(tematica3))
+		.isIn(dtoResultado);
+	}
 	
 	private Tematica generarTematica() {
 		Tematica tematica = new Tematica();
