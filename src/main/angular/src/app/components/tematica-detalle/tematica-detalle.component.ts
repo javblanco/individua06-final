@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalBorrarComponent } from 'src/app/modal/modal-borrar/modal-borrar.component';
 import { ModalGuardarComponent } from 'src/app/modal/modal-guardar/modal-guardar.component';
 import { ModalSalirComponent } from 'src/app/modal/modal-salir/modal-salir.component';
 import { Categoria } from 'src/app/model/categoria';
@@ -94,7 +95,11 @@ export class TematicaDetalleComponent implements OnInit {
   }
 
   eliminar(index: any): void {
-    this.listaSubtematicas.splice(index, 1);
+    this.modalService.open(ModalBorrarComponent)
+    .result.then(
+      () => this.listaSubtematicas.splice(index, 1)
+    );
+    
   }
 
   guardar(): void {
