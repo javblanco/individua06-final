@@ -1,0 +1,106 @@
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Temática</h1>
+    </div>
+  </div>
+
+  <div class="container border rounded-sm border-black-50 p-3 bg-light mb-5">
+  <form class="form-group" [formGroup]="tematicaForm" >
+
+    <div class="form-group">
+      <label for="tematica-nombre">Nombre:</label>
+      <input class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" id="tematica-nombre" type="text" formControlName="nombre">
+      
+    </div>
+    <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
+    class="alert alert-warning">
+
+  <span *ngIf="nombre?.errors?.required">
+    El nombre es obligatorio.
+  </span>
+  <span *ngIf="nombre?.errors?.maxlength">
+    El nombre no puede superar los 50 carácteres.
+  </span>
+</div>
+
+
+    <div class="form-group">
+      <label for="tematica-ref">Referencia:</label>
+      <input class="form-control" id="tematica-ref" [ngClass]="{'border border-danger': referencia?.invalid}" type="text" formControlName="referencia">
+    </div>
+    <div *ngIf="referencia?.invalid && (referencia?.dirty || referencia?.touched)"
+    class="alert alert-warning">
+
+  <span *ngIf="referencia?.errors?.required">
+    La referencia es obligatoria.
+  </span>
+  <span *ngIf="referencia?.errors?.minlength">
+    La referencia debe tener al menos 5 carácteres.
+  </span>
+</div>
+
+      <div class="form-group">
+      <label for="tematica-desc">Descripción:</label>
+      <textarea class="form-control" id="tematica-desc" formControlName="descripcion"></textarea>
+</div>
+<div *ngIf="descripcion?.invalid && (descripcion?.dirty || descripcion?.touched)"
+      class="alert alert-warning">
+    <span *ngIf="descripcion?.errors?.maxlength">
+      La descripción no puede superar los 1000 carácteres.
+    </span>
+  </div>
+      <div class="form-group">
+      <label for="tematica-cat">Categoría:</label>
+      <select id="tematica-cat" class="form-control" formControlName="categoria">
+        <option [value]="null" selected disabled>
+            Seleccione una opción
+        </option>
+        <option *ngFor="let categoria of categorias" [value]="categoria">
+            {{categoria | titlecase}}
+        </option>
+    </select>
+  </div>
+
+    <div class="rounded-sm border border-black p-3 bg-white mb-5">
+      <h5>Subtemáticas</h5>
+
+      <div class="form-row">
+        <div class="form-group col-11">
+          <input class="form-control" id="tematica-sub" type="text" formControlName="subtematica" placeholder="Subtemática">
+        </div>
+        <div class="form-group col-1">
+          <button class="btn btn-primary" id="tematica-sub-boton" (click)="addSubtematica()" [disabled]="lectura">Añadir</button>
+        </div>
+      </div>      
+
+      <table *ngIf="listaSubtematicas.length" class="table subtematica table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="col-11">Nombre</th>
+            <th class="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let subtematica of listaSubtematicas;  let i=index">
+            <td>{{subtematica}}</td>
+            <td><button class="btn btn-danger" id="boton-eliminar-subtematica" [disabled]="lectura" (click)="eliminar(i)">Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="alert alert-success" id="mensaje-exito"  *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error"  *ngIf="mensajeError">{{mensajeError}}</div>
+
+    <div class="clearfix">
+    <div class="float-left">
+      <button class="btn btn-secondary" id="boton-tematica-salir" (click)="salir()">Salir</button>
+    </div>
+
+    <div class="float-right">
+      <button class="btn btn-primary" id="boton-tematica-guardar" [disabled]="lectura" (click)="guardar()">Guardar</button>
+    </div>
+  </div>
+  </form>
+</div>

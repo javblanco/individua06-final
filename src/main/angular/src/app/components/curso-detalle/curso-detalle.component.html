@@ -1,0 +1,168 @@
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Curso</h1>
+    </div>
+  </div>
+
+  <div class="container border rounded-sm border-black-50 p-3 bg-light mb-5">
+  <form class="form-group" [formGroup]="cursoForm">
+
+    <div class="form-group">
+      <label for="curso-nombre">Nombre:</label>
+      <input class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" id="curso-nombre" type="text" formControlName="nombre">
+      
+    </div>
+    <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
+      class="alert alert-warning">
+  
+    <span *ngIf="nombre?.errors?.required">
+      El nombre es obligatorio.
+    </span>
+    <span *ngIf="nombre?.errors?.maxlength">
+      El nombre no puede superar los 50 carácteres.
+    </span>
+  </div>
+      <div class="form-group">
+      <label for="curso-desc">Descripción:</label>
+      <textarea class="form-control" id="curso-desc" formControlName="descripcion"></textarea>
+</div>
+<div *ngIf="descripcion?.invalid && (descripcion?.dirty || descripcion?.touched)"
+      class="alert alert-warning">
+    <span *ngIf="descripcion?.errors?.maxlength">
+      La descripción no puede superar los 1000 carácteres.
+    </span>
+  </div>
+      <div class="form-group">
+      <label for="curso-tem">Temática:</label>
+      <select id="curso-tem" class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" formControlName="tematicas" required>
+        <option [value]="null" selected disabled>
+            Seleccione una opción
+        </option>
+        <option *ngFor="let tematica of tematicas" [value]="tematica.id">
+            {{tematica.nombre | titlecase}}
+        </option>
+    </select>
+  </div>
+  <div *ngIf="tematica?.invalid && (tematica?.dirty || tematica?.touched)"
+  class="alert alert-warning">
+
+<span *ngIf="tematica?.errors?.required">
+ La temática es obligatoria.
+</span>
+</div>
+  <div class="form-row">
+    <div class="form-group col-12 col-md-6">
+      <label for="curso-duracion">Duración:</label>
+      <div class="input-group" [ngClass]="{'border rounded border-danger': duracion?.invalid}">
+        <input class="form-control text-right"  id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
+        <div class="input-group-append">
+          <span class="input-group-text" id="curso-precio-hora">h.</span>
+        </div>
+       
+        </div>
+        <div *ngIf="duracion?.invalid && (duracion?.dirty || duracion?.touched)"
+        class="alert alert-warning mt-3">
+      
+      <span *ngIf="duracion?.errors?.required">
+       La duración es obligatoria.
+      </span>
+      <span *ngIf="duracion?.errors?.noNumero">
+        No se admiten carácteres alfabéticos.
+       </span>
+       <span *ngIf="duracion?.errors?.mayor0">
+        La duración del curso debe ser mayor que 0.
+       </span>
+  
+    <span *ngIf="duracion?.errors?.noEntero">
+      No se admiten números decimales.
+     </span>
+      </div>
+    </div>
+    
+    <div class="form-group col-12 col-md-6">
+      <label for="curso-alumnos">Alumnos :</label>
+        <input class="form-control text-right" id="curso-alumnos" type="number" formControlName="cantidadAlumnos">
+        <div *ngIf="cantidadAlumnos?.invalid && (cantidadAlumnos?.dirty || cantidadAlumnos?.touched)"
+    class="alert alert-warning mt-3">
+    <span *ngIf="cantidadAlumnos?.errors?.noNumero">
+      No se admiten carácteres alfabéticos.
+     </span>
+  <span *ngIf="cantidadAlumnos?.errors?.noPositivo">
+    No se admiten números negativos.
+   </span>
+
+  <span *ngIf="cantidadAlumnos?.errors?.noEntero">
+    No se admiten números decimales.
+   </span>
+  </div>
+    </div>
+    
+  </div>  
+
+  <div class="form-row">
+    <div class="form-group col-12 col-md-6">
+      <label for="curso-temas">Temas :</label>
+        <input class="form-control text-right" id="curso-temas" type="number" formControlName="numeroTemas" entero>
+        <div *ngIf="numeroTemas?.invalid && (numeroTemas?.dirty || numeroTemas?.touched)"
+    class="alert alert-warning mt-3">
+    <span *ngIf="numeroTemas?.errors?.noNumero">
+      No se admiten carácteres alfabéticos.
+     </span>
+  <span *ngIf="numeroTemas?.errors?.noPositivo">
+    No se admiten números negativos.
+   </span>
+
+  <span *ngIf="numeroTemas?.errors?.noEntero">
+    No se admiten números decimales.
+   </span>
+  </div>
+    </div>
+    
+    <div class="form-group col-12 col-md-6">
+      <label for="curso-precio">Precio :</label>
+      <div class="input-group">
+        <input class="form-control" id="curso-precio" type="number" formControlName="precio" aria-describedby="curso-precio-moneda" placeholder="No rellene el campo para dejar el curso como gratuito.">
+        <div class="input-group-append">
+          <span class="input-group-text text-right" id="curso-precio-moneda">€</span>
+        </div>
+    </div>
+    <div *ngIf="precio?.invalid && (precio?.dirty || precio?.touched)"
+    class="alert alert-warning mt-3">
+    <span *ngIf="precio?.errors?.noNumero">
+      No se admiten carácteres alfabéticos.
+     </span>
+  <span *ngIf="precio?.errors?.min">
+    No se admiten números negativos.
+   </span>
+
+  <span *ngIf="precio?.errors?.no2Decimales">
+    El formato solo admite hasta dos decimales.
+   </span>
+  </div>
+    </div>
+  </div>   
+
+  <div class="form-row">
+    <div class="form-group col col-md-2">
+      <label for="curso-certificado">Certificación :</label>
+    </div>
+    <div class="form-group col col-md-10">
+        <input class="form-check-input mr-0" id="curso-certificado" type="checkbox" formControlName="certificacion">
+    </div>
+  </div>  
+    <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
+
+    <div class="clearfix">
+    <div class="float-left">
+      <button class="btn btn-secondary" id="boton-curso-salir" (click)="salir()">Salir</button>
+    </div>
+
+    <div class="float-right">
+      <button class="btn btn-primary" id="boton-curso-guardar" (click)="guardar()" [disabled]="lectura">Guardar</button>
+    </div>
+  </div>
+  </form>
+</div>
+

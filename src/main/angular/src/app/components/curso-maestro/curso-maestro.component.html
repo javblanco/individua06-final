@@ -1,0 +1,43 @@
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Cursos</h1>
+    </div>
+  </div>
+
+  <div class="p-5">
+      <table *ngIf="cursos.length" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Temática</th>
+                <th>Duración</th>
+                <th>Certificación</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let curso of cursos">
+                <td>{{curso.nombre}}</td>
+                <td>{{curso.nombreTematica}}</td>
+                <td>{{curso.duracion}} horas</td>
+                <td><input type="checkbox" [checked]="curso.certificacion" disabled/></td>
+                <td><span *ngIf="curso.precio">{{curso.precio}} €</span>
+                    <span *ngIf="!curso.precio">Gratuito</span></td>
+                <td><a class="btn btn-info mr-1 mb-1" id="boton-ver-curso" (click)="ver()" routerLink="../{{curso.id}}">Ver</a>
+                    <a class="btn btn-primary mr-1 mb-1" id="boton-modificar-curso" routerLink="../{{curso.id}}">Modificar</a>
+                    <button class="btn btn-warning mr-1 mb-1" *ngIf="curso.activo" id="boton-baja-curso" (click)="baja(curso)">Baja</button>
+                    <button class="btn btn-success mr-1 mb-1" *ngIf="!curso.activo" id="boton-alta-curso" (click)="alta(curso)">Alta</button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
+
+      <div class="alert alert-secondary" *ngIf="!cursos.length">Todavía no hay cursos dados de alta.</div>
+      <div class="float-right"><a class="btn btn-primary" id="boton-nueva-curso" routerLink="../">Nuevo</a></div>
+  </div>
