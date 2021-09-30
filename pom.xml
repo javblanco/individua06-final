@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.cic.bootcamp</groupId>
 	<artifactId>individual06-final</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>individual06-final</name>
 	<description>Proyecto final individual de Rebeca Povedano</description>
 	<properties>
