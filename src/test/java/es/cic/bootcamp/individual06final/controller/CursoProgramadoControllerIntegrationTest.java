@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,34 +34,39 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.cic.bootcamp.individual06final.dto.CursoDto;
+import es.cic.bootcamp.individual06final.dto.CursoProgramadoDto;
 import es.cic.bootcamp.individual06final.enumeration.Categoria;
-import es.cic.bootcamp.individual06final.helper.CursoHelper;
+import es.cic.bootcamp.individual06final.helper.CursoProgramadoHelper;
 import es.cic.bootcamp.individual06final.model.Curso;
+import es.cic.bootcamp.individual06final.model.CursoProgramado;
 import es.cic.bootcamp.individual06final.model.Tematica;
+import es.cic.bootcamp.individual06final.repository.CursoProgramadoRepository;
 import es.cic.bootcamp.individual06final.repository.CursoRepository;
 import es.cic.bootcamp.individual06final.repository.TematicaRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CursoControllerIntegrationTest {
-
-
+class CursoProgramadoControllerIntegrationTest {
+	
 	@Autowired
 	private MockMvc mvc;
+	
+	@Autowired
+	private CursoProgramadoRepository cursoProgramadoRepository;
+	
+	@Autowired
+	private CursoProgramadoHelper cursoProgramadoHelper;
 	
 	@Autowired
 	private CursoRepository cursoRepository;
 	
 	@Autowired
-	private TematicaRepository tematicaRepository;
-	
-	@Autowired
-	private CursoHelper cursoHelper;
-	
+	private TematicaRepository tematicaRepository;	
+
 	@Autowired
 	private ObjectMapper mapper;
 	
+
 	@BeforeEach
 	void setUp() throws Exception {
 	}
@@ -68,12 +75,16 @@ class CursoControllerIntegrationTest {
 	void testCreate() throws Exception {
 		Tematica tematica = tematicaRepository.save(generarTematica());
 		
-		CursoDto dto = generarCursoDto(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
+		
+		
+		
+		CursoProgramadoDto dto = generarProgramadoDto(curso);
 		
 		String body = mapper.writeValueAsString(dto);
 		
 		MockHttpServletRequestBuilder request =
-				post("/api/curso")
+				post("/api/programacion")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body);
@@ -88,57 +99,31 @@ class CursoControllerIntegrationTest {
 		
 		Long idResultado = Long.parseLong(respuesta);
 		
-		Curso cursoEnBBDD = cursoRepository.findById(idResultado).get();
+		CursoProgramado cursoProgramadoEnBBDD = cursoProgramadoRepository.findById(idResultado).get();
 		
-		assertThat(cursoEnBBDD)
+		assertThat(cursoProgramadoEnBBDD)
 		.usingRecursiveComparison()
 		.ignoringFields("id")
-		.isEqualTo(cursoHelper.dtoToEntity(dto, tematica));
+		.isEqualTo(cursoProgramadoHelper.dtoToEntity(dto, curso));
 	}
 
-	@Test
-	void testRead() throws Exception {
-		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso = generarCurso(tematica);
-		
-		cursoRepository.save(curso);
-		
-		MockHttpServletRequestBuilder request =
-				get("/api/curso/{id}", curso.getId())
-				.accept(MediaType.APPLICATION_JSON)
-				.contentType(MediaType.APPLICATION_JSON);
-		
-		CursoDto dto = cursoHelper.entityToDto(curso);
-		dto.setId(curso.getId());
-		
-		String respuesta = mapper.writeValueAsString(dto);
-		
-		MvcResult result = 
-				mvc.perform(request)
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", notNullValue()))
-				.andReturn();
-		
-		String resultado = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-		
-		assertEquals(mapper.readTree(respuesta), mapper.readTree(resultado), "El registro no es el esperado");
-	}
+	
 
 	@Test
 	void testList() throws Exception {
 		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso1 = generarCurso(tematica);
-		Curso curso = generarCurso(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
+		CursoProgramado programado1 = generarProgramado(curso);
+		CursoProgramado programado2 = generarProgramado(curso);
 		
-		List<Curso> lista = List.of(curso1, curso);
-		cursoRepository.saveAll(lista);
+		List<CursoProgramado> lista = List.of(programado1, programado2);
+		cursoProgramadoRepository.saveAll(lista);
 		
 		
-		List<CursoDto> dtos = cursoHelper.listEntityToListDto(lista);
+		List<CursoProgramadoDto> dtos = cursoProgramadoHelper.listEntityToListDto(lista);
 		
 		MockHttpServletRequestBuilder request =
-				get("/api/curso")
+				get("/api/programacion")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		
@@ -151,7 +136,7 @@ class CursoControllerIntegrationTest {
 		
 		String resultado = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 		
-		List<CursoDto> dtoResultado = mapper.readValue(resultado, new TypeReference<List<CursoDto>>(){});
+		List<CursoProgramadoDto> dtoResultado = mapper.readValue(resultado, new TypeReference<List<CursoProgramadoDto>>(){});
 		
 		assertThat(dtoResultado)
 		.containsAnyElementsOf(dtos);
@@ -160,20 +145,21 @@ class CursoControllerIntegrationTest {
 	@Test
 	void testUpdate() throws Exception {
 		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso = generarCurso(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
 		
-		cursoRepository.save(curso);
+		CursoProgramado cursoProgramado = cursoProgramadoRepository.save(generarProgramado(curso));
 		
-		CursoDto dto = cursoHelper.entityToDto(curso);
-		dto.setId(curso.getId());
-		dto.setNombre("BBDD 101");
+		CursoProgramadoDto dto = cursoProgramadoHelper.entityToDto(cursoProgramado);
 		
-		Curso cursoAModificar = cursoHelper.dtoToEntity(dto, tematica);
+		dto.setId(cursoProgramado.getId());
+		dto.setFechaFin(null);
+		
+		CursoProgramado programadoAModificar = cursoProgramadoHelper.dtoToEntity(dto, curso);
 		
 		String body = mapper.writeValueAsString(dto);
 		
 		MockHttpServletRequestBuilder request =
-				put("/api/curso")
+				put("/api/programacion")
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body);
@@ -182,24 +168,24 @@ class CursoControllerIntegrationTest {
 		.andDo(print())
 		.andExpect(status().isOk());
 		
-		Curso cursoEnBBDD = cursoRepository.findById(curso.getId()).get();
+		CursoProgramado programadoEnBBDD = cursoProgramadoRepository.findById(cursoProgramado.getId()).get();
 		
-		assertThat(cursoEnBBDD)
+		assertThat(programadoEnBBDD)
 		.usingRecursiveComparison()
-		.isEqualTo(cursoAModificar);
+		.isEqualTo(programadoAModificar);
 		
 		
 	}
 	
 	@Test
-	void testBaja() throws Exception{
+	void testDelete() throws Exception {
 		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso = generarCurso(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
 		
-		cursoRepository.save(curso);
-		
+		CursoProgramado cursoProgramado = cursoProgramadoRepository.save(generarProgramado(curso));
+
 		MockHttpServletRequestBuilder request =
-				post("/api/curso/baja/{id}", curso.getId())
+				delete("/api/programacion/{id}", cursoProgramado.getId())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		
@@ -207,22 +193,20 @@ class CursoControllerIntegrationTest {
 		.andDo(print())
 		.andExpect(status().isOk());
 		
-		Curso cursoEnBBDD = cursoRepository.findById(curso.getId()).get();
-		
-		assertFalse(cursoEnBBDD.isActivo(), "No se ha conseguido dar de baja el curso");
+		Optional<CursoProgramado> optional = cursoProgramadoRepository.findById(cursoProgramado.getId());
+
+		assertTrue(optional.isEmpty(), "No se ha borrado la entrada.");
 	}
 	
 	@Test
-	void testAlta() throws Exception{
+	void testAbrirInscripciones() throws Exception{
 		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso = generarCurso(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
 		
-		cursoRepository.save(curso);
-		curso.setActivo(false);
-		cursoRepository.save(curso);
+		CursoProgramado cursoProgramado = cursoProgramadoRepository.save(generarProgramado(curso));
 		
 		MockHttpServletRequestBuilder request =
-				post("/api/curso/alta/{id}", curso.getId())
+				post("/api/programacion/abrir/{id}", cursoProgramado.getId())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		
@@ -230,61 +214,58 @@ class CursoControllerIntegrationTest {
 		.andDo(print())
 		.andExpect(status().isOk());
 		
-		Curso cursoEnBBDD = cursoRepository.findById(curso.getId()).get();
+		CursoProgramado cursoProgramadoEnBBDD = cursoProgramadoRepository.findById(cursoProgramado.getId()).get();
 		
-		assertTrue(cursoEnBBDD.isActivo(), "No se ha conseguido dar de alta el curso");
+		assertTrue(cursoProgramadoEnBBDD.isInscripcion(), "No se ha conseguido abrir las inscripciones al curso el curso");
 	}
 	
 	@Test
-	void testListActivos() throws Exception {
+	void testCerrarInscripciones() throws Exception{
 		Tematica tematica = tematicaRepository.save(generarTematica());
-		Curso curso1 = generarCurso(tematica);
-		Curso curso = generarCurso(tematica);
+		Curso curso = cursoRepository.save(generarCurso(tematica));
 		
-		List<Curso> lista = List.of(curso1, curso);
-		cursoRepository.saveAll(lista);
+		CursoProgramado cursoProgramado = cursoProgramadoRepository.save(generarProgramado(curso));
 		
-		curso1.setActivo(false);
-		cursoRepository.save(curso1);
-		
+		cursoProgramado.setInscripcion(true);
+		cursoProgramadoRepository.save(cursoProgramado);
 		
 		MockHttpServletRequestBuilder request =
-				get("/api/curso/activos")
+				post("/api/programacion/cerrar/{id}", cursoProgramado.getId())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON);
 		
-		MvcResult result = mvc.perform(request)
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$",hasSize(greaterThanOrEqualTo(2))))
-				.andReturn();
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isOk());
 		
-		String resultado = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+		CursoProgramado cursoProgramadoEnBBDD = cursoProgramadoRepository.findById(cursoProgramado.getId()).get();
 		
-		List<CursoDto> dtoResultado = mapper.readValue(resultado, new TypeReference<List<CursoDto>>(){});
-		
-		assertThat(dtoResultado)
-		.doesNotContain(cursoHelper.entityToDto(curso1))
-		.contains(cursoHelper.entityToDto(curso));
-		
+		assertFalse(cursoProgramadoEnBBDD.isInscripcion(), "No se ha conseguido cerrar las inscripciones al curso el curso");
 	}
 	
-	private CursoDto generarCursoDto(Tematica tematica) {
-		CursoDto dto = new CursoDto();
+	private CursoProgramadoDto generarProgramadoDto (Curso curso) {
+		CursoProgramadoDto dto = new CursoProgramadoDto();
 		
-		dto.setNombre("Big data en analítica");
-		dto.setDescripcion("Un curso de big data");
-		dto.setCantidadAlumnos(30);
-		dto.setNumeroTemas(12);
-		dto.setDuracion(600);
-		dto.setCertificacion(true);
-		dto.setPrecio(new BigDecimal("35.60"));
-		dto.setIdTematica(tematica.getId());
+		dto.setIdCurso(curso.getId());
+		dto.setNombreCurso(curso.getNombre());
+		dto.setInscripcion(false);
+		dto.setFechaInicio(LocalDate.of(2021, Month.APRIL, 14));
+		dto.setFechaFin(LocalDate.of(2021, Month.SEPTEMBER, 30));
 		
 		return dto;
 	}
 	
+	private CursoProgramado generarProgramado(Curso curso) {
+		CursoProgramado cursoProgramado = new CursoProgramado();
+		
+		cursoProgramado.setCurso(curso);
+		cursoProgramado.setInscripcion(false);
+		cursoProgramado.setFechaInicio(LocalDate.of(2021, Month.APRIL, 14));
+		cursoProgramado.setFechaFin(LocalDate.of(2021, Month.SEPTEMBER, 30));
+		
+		return cursoProgramado;
+	}
+
 	private Curso generarCurso(Tematica tematica) {
 		Curso curso = new Curso();
 		
@@ -311,5 +292,6 @@ class CursoControllerIntegrationTest {
 		
 		return tematica;
 	}
+
 
 }

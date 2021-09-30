@@ -69,4 +69,10 @@ public class CursoController {
 		LOGGER.log(Level.INFO, "Método post de /api/curso/baja. Procesando el alta del curso con {0}", id);  
 		cursoService.alta(id);
 	}
+	
+	@GetMapping("/activos")
+	public List<CursoDto> listActivos() {
+		LOGGER.info("Método get de /api/curso/activos. Se listan los cursos actualmente activos");
+		return cursoService.listActivos();
+	}
 }
