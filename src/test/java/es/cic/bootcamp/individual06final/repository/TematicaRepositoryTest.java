@@ -206,6 +206,9 @@ class TematicaRepositoryTest {
 
 		assertThat(tematica4)
 		.isNotIn(resultado);
+
+		assertThat(tematica2)
+		.isIn(resultado);
 	}
 	
 	

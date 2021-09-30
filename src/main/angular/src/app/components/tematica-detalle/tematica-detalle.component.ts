@@ -47,6 +47,8 @@ export class TematicaDetalleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.mensaje = '';
+    this.mensajeError = '';
     this.getTematica();
     this.isLectura();
   }

@@ -56,7 +56,7 @@ public class TematicaService {
 			return dto;
 		} else {
 			LOGGER.info("No existe ningún registro con esa id");
-			return null;
+			throw new TematicaException("No existe la temática que se está buscando.");
 		}
 	}
 

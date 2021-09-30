@@ -16,6 +16,6 @@ public interface TematicaRepository extends CrudRepository<Tematica, Long> {
 	@Query("select distinct t, CASE WHEN (c is null) THEN true ELSE false END from Tematica t left join Curso c on c.tematica = t")
 	public List<Object[]> findAllWithEliminable();
 
-	@Query("select distinct t from Tematica t left join Curso c on c.tematica = t where t.activo is true or (c.tematica = t and c.id = :id)")
+	@Query("select distinct t from Tematica t join Curso c on c.tematica = t where t.activo is true or c.id = :id")
 	public List<Tematica> findAllByActivoWithCursoId(@Nullable @Param("id") Long id);
 }

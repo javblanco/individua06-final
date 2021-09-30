@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.cic.bootcamp.individual06final.dto.CursoDto;
 import es.cic.bootcamp.individual06final.exception.CursoException;
+import es.cic.bootcamp.individual06final.exception.TematicaException;
 import es.cic.bootcamp.individual06final.helper.CursoHelper;
 import es.cic.bootcamp.individual06final.model.Curso;
 import es.cic.bootcamp.individual06final.model.Tematica;
@@ -61,7 +62,7 @@ public class CursoService {
 		} else {
 
 			LOGGER.info("No existe ningún registro con esa id");
-			return null;
+			throw new CursoException("No existe el curso que se está buscando.");
 		}
 	}
 	
@@ -89,8 +90,13 @@ public class CursoService {
 		
 		if(optional.isPresent()) {
 			Curso curso = optional.get();
+
+			Tematica tematica = null;
+
+			if(dto.getIdTematica() != curso.getTematica().getId()) {
+				tematica = findTematica(dto);
+			}
 			
-			Tematica tematica = findTematica(dto);
 			
 			cursoHelper.dtoToEntity(dto, curso, tematica);
 			
@@ -155,15 +161,21 @@ public class CursoService {
 			if(optional.isPresent()) {
 
 				LOGGER.info("Se ha leído la temática asociada a este curso.");
-				return optional.get();
+				Tematica tematica = optional.get();
+
+				if(tematica.isActivo()) {
+					return optional.get();
+				} else {
+					throw new TematicaException("No se puede seleccionar una temática inhabilitada");
+				}
 			} else {
 				LOGGER.info("No existe la temática asociada a este curso");
-				return null;
+				throw new TematicaException("No existe la temática seleccionada");
 			}
 		} else {
 
-			LOGGER.info("No existe la temática asociada a este curso");
-			return null;
+			LOGGER.info("No se ha seleccionado una temática");
+			throw new TematicaException("No existe la temática seleccionada");
 		}
 	}
 }

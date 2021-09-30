@@ -50,6 +50,8 @@ export class CursoDetalleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.mensaje = '';
+    this.mensajeError = '';
     this.getTematicas();
     this.getCurso();
     this.isLectura();
@@ -97,7 +99,8 @@ export class CursoDetalleComponent implements OnInit {
         {
           this.curso = res;
           this.setValue();          
-        })
+        },
+        err => this.mensajeError = err.message)
     }
   }
 
