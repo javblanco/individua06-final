@@ -82,4 +82,12 @@ public class TematicaController {
 
 		return tematicaService.listActivos();
 	}
+
+
+	@GetMapping("/curso/{id}")
+	public List<TematicaDto> listActivosWithCursoActual(@PathVariable(required = true, name = "id") Long id) {
+		LOGGER.log(Level.INFO, "Método get de /api/tematica/curso/{0}. Leyendo registros activos actualmente y la temática asociada al curso que se está visualizando.");
+
+		return tematicaService.listActivosConCurso(id);
+	}
 }

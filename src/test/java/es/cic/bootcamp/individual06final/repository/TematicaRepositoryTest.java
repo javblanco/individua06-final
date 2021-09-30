@@ -177,6 +177,39 @@ class TematicaRepositoryTest {
 		.isNotIn(tematicasNoEliminable);
 
 	}
+	@Test
+	void testFindAllByActivoWithCursoId() {
+		Tematica tematica1 = generarTematica();
+		Tematica tematica2 = generarTematica();
+		Tematica tematica3 = generarTematica();
+		Tematica tematica4 = generarTematica();
+		
+		entityManager.persist(tematica1);
+		entityManager.persist(tematica2);
+		entityManager.persist(tematica3);
+		entityManager.persistAndFlush(tematica4);
+		
+		Curso curso1 = generarCurso(tematica2);
+		entityManager.persistAndFlush(curso1);
+
+		tematica2.setActivo(false);
+		tematica4.setActivo(false);
+		entityManager.merge(tematica2);
+		entityManager.merge(tematica4);
+
+		List<Tematica> resultado = tematicaRepository.findAllByActivoWithCursoId(curso1.getId());
+
+		List<Tematica> esperado = List.of(tematica1, tematica2, tematica3);
+
+		assertThat(resultado)
+		.containsAnyElementsOf(esperado);
+
+		assertThat(tematica4)
+		.isNotIn(resultado);
+
+		assertThat(tematica2)
+		.isIn(resultado);
+	}
 	
 	
 	private Tematica generarTematica() {

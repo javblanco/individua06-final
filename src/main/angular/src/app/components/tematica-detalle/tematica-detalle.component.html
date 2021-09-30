@@ -9,7 +9,7 @@
 
     <div class="form-group">
       <label for="tematica-nombre">Nombre:</label>
-      <input class="form-control" id="tematica-nombre" type="text" formControlName="nombre">
+      <input class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" id="tematica-nombre" type="text" formControlName="nombre">
       
     </div>
     <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
@@ -26,7 +26,7 @@
 
     <div class="form-group">
       <label for="tematica-ref">Referencia:</label>
-      <input class="form-control" id="tematica-ref" type="text" formControlName="referencia">
+      <input class="form-control" id="tematica-ref" [ngClass]="{'border border-danger': referencia?.invalid}" type="text" formControlName="referencia">
     </div>
     <div *ngIf="referencia?.invalid && (referencia?.dirty || referencia?.touched)"
     class="alert alert-warning">

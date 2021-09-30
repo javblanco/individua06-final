@@ -50,6 +50,8 @@ export class CursoDetalleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.mensaje = '';
+    this.mensajeError = '';
     this.getTematicas();
     this.getCurso();
     this.isLectura();
@@ -76,8 +78,16 @@ export class CursoDetalleComponent implements OnInit {
 
 
   getTematicas(): void {
-    this.tematicaService.getTematicasActivas()
-    .subscribe(res => this.tematicas = res);
+    const id = Number(this.routes.snapshot.paramMap.get('id'));
+
+    if(id) {
+      this.tematicaService.getTematicasActivasConCursoId(id)
+      .subscribe(res => this.tematicas = res);
+    } else {
+      this.tematicaService.getTematicasActivas()
+      .subscribe(res => this.tematicas = res);
+    }
+    
   }
 
   getCurso(): void {
@@ -89,7 +99,8 @@ export class CursoDetalleComponent implements OnInit {
         {
           this.curso = res;
           this.setValue();          
-        })
+        },
+        err => this.mensajeError = err.message)
     }
   }
 

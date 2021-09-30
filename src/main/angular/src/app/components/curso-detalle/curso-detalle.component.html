@@ -9,7 +9,7 @@
 
     <div class="form-group">
       <label for="curso-nombre">Nombre:</label>
-      <input class="form-control" id="curso-nombre" type="text" formControlName="nombre">
+      <input class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" id="curso-nombre" type="text" formControlName="nombre">
       
     </div>
     <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
@@ -34,7 +34,7 @@
   </div>
       <div class="form-group">
       <label for="curso-tem">Temática:</label>
-      <select id="curso-tem" class="form-control" formControlName="tematicas" required>
+      <select id="curso-tem" class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" formControlName="tematicas" required>
         <option [value]="null" selected disabled>
             Seleccione una opción
         </option>
@@ -51,12 +51,12 @@
 </span>
 </div>
   <div class="form-row">
-    <div class="form-group col">
-      <label for="curso-duracion">Duración :</label>
-      <div class="input-group">
-        <input class="form-control" id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
+    <div class="form-group col-12 col-md-6">
+      <label for="curso-duracion">Duración:</label>
+      <div class="input-group" [ngClass]="{'border rounded border-danger': duracion?.invalid}">
+        <input class="form-control text-right"  id="curso-duracion" type="number" formControlName="duracion" aria-describedby="curso-precio-hora">
         <div class="input-group-append">
-          <span class="input-group-text" id="curso-precio-hora">h</span>
+          <span class="input-group-text" id="curso-precio-hora">h.</span>
         </div>
        
         </div>
@@ -79,9 +79,9 @@
       </div>
     </div>
     
-    <div class="form-group col">
+    <div class="form-group col-12 col-md-6">
       <label for="curso-alumnos">Alumnos :</label>
-        <input class="form-control" id="curso-alumnos" type="number" formControlName="cantidadAlumnos">
+        <input class="form-control text-right" id="curso-alumnos" type="number" formControlName="cantidadAlumnos">
         <div *ngIf="cantidadAlumnos?.invalid && (cantidadAlumnos?.dirty || cantidadAlumnos?.touched)"
     class="alert alert-warning mt-3">
     <span *ngIf="cantidadAlumnos?.errors?.noNumero">
@@ -100,9 +100,9 @@
   </div>  
 
   <div class="form-row">
-    <div class="form-group col">
+    <div class="form-group col-12 col-md-6">
       <label for="curso-temas">Temas :</label>
-        <input class="form-control" id="curso-temas" type="number" formControlName="numeroTemas" entero>
+        <input class="form-control text-right" id="curso-temas" type="number" formControlName="numeroTemas" entero>
         <div *ngIf="numeroTemas?.invalid && (numeroTemas?.dirty || numeroTemas?.touched)"
     class="alert alert-warning mt-3">
     <span *ngIf="numeroTemas?.errors?.noNumero">
@@ -118,12 +118,12 @@
   </div>
     </div>
     
-    <div class="form-group col">
+    <div class="form-group col-12 col-md-6">
       <label for="curso-precio">Precio :</label>
       <div class="input-group">
         <input class="form-control" id="curso-precio" type="number" formControlName="precio" aria-describedby="curso-precio-moneda" placeholder="No rellene el campo para dejar el curso como gratuito.">
         <div class="input-group-append">
-          <span class="input-group-text" id="curso-precio-moneda">€</span>
+          <span class="input-group-text text-right" id="curso-precio-moneda">€</span>
         </div>
     </div>
     <div *ngIf="precio?.invalid && (precio?.dirty || precio?.touched)"
@@ -143,11 +143,11 @@
   </div>   
 
   <div class="form-row">
-    <div class="form-group col-2">
+    <div class="form-group col col-md-2">
       <label for="curso-certificado">Certificación :</label>
     </div>
-    <div class="form-group col-10">
-        <input class="form-check-input" id="curso-certificado" type="checkbox" formControlName="certificacion">
+    <div class="form-group col col-md-10">
+        <input class="form-check-input mr-0" id="curso-certificado" type="checkbox" formControlName="certificacion">
     </div>
   </div>  
     <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>

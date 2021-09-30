@@ -42,7 +42,6 @@ describe('Navegación en el listado, creación y actualización de temáticas', 
     cy.get('button#tematica-sub-boton').click();
     cy.get('table.table.subtematica tbody tr').should('have.length', 2);
     cy.get('button#boton-eliminar-subtematica').first().click();
-    cy.get('button#modal-boton-guardar').click();
     cy.get('table.table.subtematica tbody tr').should('have.length', 1);
     cy.get('button#boton-tematica-guardar').click();
     cy.get('button#modal-boton-guardar').click();
@@ -85,7 +84,6 @@ describe('Navegación en el listado, creación y actualización de temáticas', 
     cy.get('button#tematica-sub-boton').click();
     cy.get('table.table.subtematica tbody tr').should('have.length', 2);
     cy.get('button#boton-eliminar-subtematica').first().click();
-    cy.get('button#modal-boton-guardar').click();
     cy.get('table.table.subtematica tbody tr').should('have.length', 1);
     cy.get('button#boton-tematica-guardar').click();
     cy.get('button#modal-boton-guardar').click();

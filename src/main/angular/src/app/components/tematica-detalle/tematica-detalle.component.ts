@@ -47,6 +47,8 @@ export class TematicaDetalleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.mensaje = '';
+    this.mensajeError = '';
     this.getTematica();
     this.isLectura();
   }
@@ -109,10 +111,7 @@ export class TematicaDetalleComponent implements OnInit {
   }
 
   eliminar(index: any): void {
-    this.modalService.open(ModalBorrarComponent)
-    .result.then(
-      () => this.listaSubtematicas.splice(index, 1)
-    );
+     this.listaSubtematicas.splice(index, 1);
     
   }
 
