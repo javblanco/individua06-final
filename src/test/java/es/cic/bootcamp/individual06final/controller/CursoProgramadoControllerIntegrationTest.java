@@ -107,6 +107,30 @@ class CursoProgramadoControllerIntegrationTest {
 		.isEqualTo(cursoProgramadoHelper.dtoToEntity(dto, curso));
 	}
 
+	@Test
+	void testCreateFechaIncorrecta() throws Exception {
+		Tematica tematica = tematicaRepository.save(generarTematica());
+		
+		Curso curso = cursoRepository.save(generarCurso(tematica));
+		
+		
+		
+		CursoProgramadoDto dto = generarProgramadoDto(curso);
+
+		dto.setFechaInicio(LocalDate.of(2021, Month.NOVEMBER, 14));
+		
+		String body = mapper.writeValueAsString(dto);
+		
+		MockHttpServletRequestBuilder request =
+				post("/api/programacion")
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(body);
+		
+		mvc.perform(request)
+		.andDo(print())
+		.andExpect(status().isBadRequest());
+	}
 	
 
 	@Test

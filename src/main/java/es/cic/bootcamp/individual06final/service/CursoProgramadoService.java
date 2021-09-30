@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +42,7 @@ public class CursoProgramadoService {
 			throw new CursoProgramadoException("Ya se ha dado de alta esta entrada");
 		}
 		
+		comprobarFecha(dto);
 		Curso curso = findCurso(dto);
 		
 		CursoProgramado cursoProgramado = cursoProgramadoHelper.dtoToEntity(dto, curso);
@@ -51,6 +51,7 @@ public class CursoProgramadoService {
 		return cursoProgramadoRepository.save(cursoProgramado).getId();
 	}
 	
+
 	public List<CursoProgramadoDto> list() {
 		List<CursoProgramado> lista = new ArrayList<>(); 
 		
@@ -164,5 +165,16 @@ public class CursoProgramadoService {
 			throw new CursoException("No se ha seleccionado el curso.");
 		}
 		
+	}
+
+
+	private void comprobarFecha(CursoProgramadoDto dto) {
+
+		if(dto.getFechaInicio() == null) {
+			throw new CursoProgramadoException("Debe seleccionar al menos la fecha de inicio.");
+		} 
+		if(dto.getFechaInicio().isAfter(dto.getFechaFin()) || dto.getFechaInicio().isEqual(dto.getFechaFin())) {
+			throw new CursoProgramadoException("La fecha de inicio debe ser anterior a la fecha de finalización.");
+		}
 	}
 }

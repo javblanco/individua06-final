@@ -17,6 +17,7 @@ public class CursoProgramadoDto {
 	
 	private String nombreCurso;
 	
+	@NotNull
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate fechaInicio;
 	

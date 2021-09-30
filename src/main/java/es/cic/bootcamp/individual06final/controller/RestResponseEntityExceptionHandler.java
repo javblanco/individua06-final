@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import es.cic.bootcamp.individual06final.exception.CursoException;
+import es.cic.bootcamp.individual06final.exception.CursoProgramadoException;
 import es.cic.bootcamp.individual06final.exception.TematicaException;
 import io.micrometer.core.lang.Nullable;
 
@@ -54,6 +55,15 @@ public class RestResponseEntityExceptionHandler
         return handleExceptionInternal(bodyOfResponse, 
           new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value 
+    = {CursoProgramadoException.class})
+  public ResponseEntity<Object> handleCursoProgramadoException(
+    RuntimeException ex, WebRequest request) {
+      String bodyOfResponse =  ex.getMessage();
+      return handleExceptionInternal(bodyOfResponse, 
+        new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
 
     private ResponseEntity<Object> handleExceptionInternal( @Nullable Object bodyOfResponse,
         HttpHeaders httpHeaders, HttpStatus status) {
