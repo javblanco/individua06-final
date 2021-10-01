@@ -111,7 +111,7 @@ export class ModalProgramadorComponent implements OnInit {
     this.programadorService.updateCursoProgramado(this.programador)
     .subscribe(
       res => {
-        
+        this.programador.inscripcion = this.inscripcion?.value;
         this.toastService.show('Se ha modificado la programación del curso.', { classname: 'bg-success text-light', delay: 10000 });
       },
       err => { let mensajeError = this.getMensajeError(err);

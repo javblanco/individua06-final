@@ -76,6 +76,7 @@ public class CursoProgramadoService {
 			
 			cursoProgramadoHelper.dtoToEntity(cursoProgramado, dto);			
 
+			this.comprobarFecha(dto);
 			LOGGER.info("Se ha modificado la programación seleccionada");
 			cursoProgramadoRepository.save(cursoProgramado);
 		} else {

@@ -29,6 +29,7 @@ export class ProgramadoresMaestroComponent implements OnInit {
     .subscribe(
       res => {
         this.mensajeError = '';
+        this.mensaje = '';
         this.programadores = res;
       },
       err => {this.mensajeError = err.message}

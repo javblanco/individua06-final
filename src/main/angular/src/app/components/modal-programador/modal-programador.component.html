@@ -35,10 +35,10 @@
             <label div class="form-group mr-2">Inscripción: </label>
             
             <div class="form-check form-check-inline">
-            <label for="ins-abier" class="form-check-label">Abiertas</label> <input type="radio" class="form-check-input" id="ins-abier" name="inscripcion" [value]="true" formControlName="inscripcion">
+            <label for="ins-abier" class="form-check-label">Abiertas</label> <input type="radio" class="form-check-input" id="ins-abier" name="inscripcion" [value]="true" [checked]="!programador.inscripcion" formControlName="inscripcion">
                 </div>
                 <div class="form-check form-check-inline">
-            <label for="ins-cier"  class="form-check-label">Cerradas</label> <input type="radio" class="form-check-input" id="ins-cier" name="inscripcion" [value]="false" [checked]="inscripcion" formControlName="inscripcion">
+            <label for="ins-cier"  class="form-check-label">Cerradas</label> <input type="radio" class="form-check-input" id="ins-cier" name="inscripcion" [value]="false" [checked]="!programador.inscripcion" formControlName="inscripcion">
         </div>
         </div>
     </form>
