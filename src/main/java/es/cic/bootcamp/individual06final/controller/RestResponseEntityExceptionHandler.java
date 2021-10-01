@@ -1,6 +1,8 @@
 package es.cic.bootcamp.individual06final.controller;
 
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +58,8 @@ public class RestResponseEntityExceptionHandler
           new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @ExceptionHandler(value 
     = {CursoProgramadoException.class})
   public ResponseEntity<Object> handleCursoProgramadoException(

@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h4 class="modal-title">Programar curso</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container border rounded-sm border-black-50 p-3 bg-light mb-5">
+        <form [formGroup]="programadorForm" >
+            <div class="form-group">
+            <label for="programador-nombre-curso">Curso: </label>
+            <select *ngIf="!programadorInput" class="form-control" [ngClass]="{'border border-danger': nombre?.invalid}" formControlName="nombreCurso" required>
+                <option [value]="null" selected disabled>
+                    Seleccione una opción
+                </option>
+                <option *ngFor="let curso of cursos" [value]="curso.id">
+                    {{curso.nombre | titlecase}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <div *ngIf="programadorInput" class="form-control">{{programador.nombreCurso | titlecase}}</div>
+            </div>
+
+        <div class="form-group">
+            <label>Inicio:</label>
+            <input type="date" class="form-control" lang="es-ES" formControlName="fechaInicio" [ngClass]="{'border border-danger': fechaInicio?.invalid}" >
+        </div>
+
+        <div class="form-group">
+            <label>Fin:</label>
+            <input type="date" class="form-control" lang="es-ES" formControlName="fechaFin">
+        </div>
+        <div class="form-group">
+            <label div class="form-group mr-2">Inscripción: </label>
+            
+            <div class="form-check form-check-inline">
+            <label for="ins-abier" class="form-check-label">Abiertas</label> <input type="radio" class="form-check-input" id="ins-abier" name="inscripcion" [value]="true" formControlName="inscripcion">
+                </div>
+                <div class="form-check form-check-inline">
+            <label for="ins-cier"  class="form-check-label">Cerradas</label> <input type="radio" class="form-check-input" id="ins-cier" name="inscripcion" [value]="false" [checked]="inscripcion" formControlName="inscripcion">
+        </div>
+        </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary float-left" (click)="activeModal.close('Salir click')">Salir</button>
+    <button type="button" class="btn btn-primary float-right" (click)="guardar()" id="modal-boton-reponer">Guardar</button>
+  </div>
+
+  <app-toast aria-live="polite" aria-atomic="true"></app-toast>

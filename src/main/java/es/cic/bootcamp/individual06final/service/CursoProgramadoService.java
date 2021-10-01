@@ -172,8 +172,11 @@ public class CursoProgramadoService {
 
 		if(dto.getFechaInicio() == null) {
 			throw new CursoProgramadoException("Debe seleccionar al menos la fecha de inicio.");
-		} 
-		if(dto.getFechaInicio().isAfter(dto.getFechaFin()) || dto.getFechaInicio().isEqual(dto.getFechaFin())) {
+		}  
+
+		boolean existeFechaFin = dto.getFechaFin() != null && !dto.getFechaFin().toString().equals("");
+
+		if(existeFechaFin && (dto.getFechaInicio().isAfter(dto.getFechaFin()) || dto.getFechaInicio().isEqual(dto.getFechaFin()))) {
 			throw new CursoProgramadoException("La fecha de inicio debe ser anterior a la fecha de finalización.");
 		}
 	}
