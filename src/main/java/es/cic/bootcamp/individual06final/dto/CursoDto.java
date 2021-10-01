@@ -40,7 +40,6 @@ public class CursoDto {
 	private boolean activo;
 	
 	@Digits(fraction = 2, integer = 6)
-	//@Currency(value = "EUR")
 	private BigDecimal precio;
 	
 	public CursoDto() {

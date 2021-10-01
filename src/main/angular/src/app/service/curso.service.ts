@@ -51,14 +51,6 @@ export class CursoService {
     );
   }
 
-  deleteCurso(id: number): Observable<any> {
-    const idUrl = `${this.url}/${id}`;
-
-    return this.http.delete<any>(idUrl).pipe(
-      catchError(err => {throw new Error(err.error)})
-    );
-  }
-
   bajaCurso(id:number): Observable<any> {
     const baja = `${this.url}/baja/${id}`;
 

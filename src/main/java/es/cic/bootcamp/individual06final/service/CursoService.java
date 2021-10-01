@@ -154,6 +154,12 @@ public class CursoService {
 		}
 	}
 	
+	public List<CursoDto> listActivos() {
+
+		LOGGER.info("Se listan todos los cursos actualmente activos.");
+		return cursoHelper.listEntityToListDto(cursoRepository.findAllByActivoTrue());
+	}
+	
 	private Tematica findTematica(CursoDto dto) {
 		if(dto.getIdTematica() !=null) {
 			Optional<Tematica> optional = tematicaRepository.findById(dto.getIdTematica());
