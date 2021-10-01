@@ -35,10 +35,12 @@ export class ModalProgramadorComponent implements OnInit {
     private fb: FormBuilder,
     private cursoService: CursoService,
     private programadorService: ProgramadoresService,
-    private toastService: ToastService
+    public toastService: ToastService
   ) { }
 
   ngOnInit(): void {
+
+    this.toastService.removeAll();
     this.getCursos();
     this.getProgramador();
     if(this.programador.id) {

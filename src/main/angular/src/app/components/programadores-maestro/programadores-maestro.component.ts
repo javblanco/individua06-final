@@ -22,14 +22,14 @@ export class ProgramadoresMaestroComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProgramadores();
+
+    this.mensajeError = '';
   }
 
   getProgramadores(): void {
     this.programadorService.getCursoProgramados()
     .subscribe(
       res => {
-        this.mensajeError = '';
-        this.mensaje = '';
         this.programadores = res;
       },
       err => {this.mensajeError = err.message}

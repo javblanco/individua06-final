@@ -23,6 +23,7 @@ export class TematicaMaestroComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTematicas();
+    this.mensajeError = '';
     this.tematicaService.lectura = false;
     this.tematicaService.fromVer = false;
   }
