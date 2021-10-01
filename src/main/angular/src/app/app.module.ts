@@ -18,6 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CursoMaestroComponent } from './components/curso-maestro/curso-maestro.component';
 import { CursoDetalleComponent } from './components/curso-detalle/curso-detalle.component';
 import { ValidarNumerosDirective } from './validation/validar-numeros.directive';
+import { ProgramadoresMaestroComponent } from './components/programadores-maestro/programadores-maestro.component';
+import { ModalProgramadorComponent } from './components/modal-programador/modal-programador.component';
+import { ToastContainerComponent } from './toast/toast-container/toast-container.component';
+import { InscripcionPipe } from './inscripcion.pipe';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { ValidarNumerosDirective } from './validation/validar-numeros.directive'
     TematicaDetalleComponent,
     CursoMaestroComponent,
     CursoDetalleComponent,
-    ValidarNumerosDirective
+    ValidarNumerosDirective,
+    ProgramadoresMaestroComponent,
+    ModalProgramadorComponent,
+    ToastContainerComponent,
+    InscripcionPipe
   ],
   imports: [
     BrowserModule,

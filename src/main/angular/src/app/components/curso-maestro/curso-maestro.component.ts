@@ -21,7 +21,7 @@ export class CursoMaestroComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCursos();
-
+    this.mensajeError = '';
     this.cursoService.lectura = false;
     this.cursoService.fromVer = false;
   }

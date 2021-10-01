@@ -1,0 +1,41 @@
+<div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Cursos programados</h1>
+    </div>
+  </div>
+
+  <div class="p-5">
+      <table *ngIf="programadores.length" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Inscripciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let programador of programadores">
+                <td>{{programador.nombreCurso}}</td>
+                <td>{{programador.fechaInicio | date:'dd/MM/yyyy'}}</td>
+                <td>{{programador.fechaFin | date:'dd/MM/yyyy'}}</td>
+                <td>{{programador.inscripcion | inscripcion}}</td>
+                <td>
+                    <a class="btn btn-primary mr-1 mb-1" id="boton-modificar-programador" (click)="modificar(programador)">Modificar</a>
+                    <button class="btn btn-warning mr-1 mb-1" *ngIf="programador.inscripcion" id="boton-cerrar-programador" (click)="cerrar(programador)">Cerrar</button>
+                    <button class="btn btn-success mr-1 mb-1" *ngIf="!programador.inscripcion" id="boton-abrir-programador" (click)="abrir(programador)">Abrir </button>
+                    <button class="btn btn-danger mr-1 mb-1"id="boton-borrar-programador" (click)="borrar(programador)">Borrar</button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-success" id="mensaje-exito" *ngIf="mensaje">{{mensaje}}</div>
+
+    <div class="alert alert-danger" id="mensaje-error" *ngIf="mensajeError">{{mensajeError}}</div>
+
+      <div class="alert alert-secondary" *ngIf="!programadores.length">Todavía no hay cursos programados.</div>
+      <div class="float-right"><a class="btn btn-primary" id="boton-nueva-curso" (click)="programar()">Programar</a></div>
+  </div>

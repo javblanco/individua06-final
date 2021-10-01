@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,39 +18,42 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import es.cic.bootcamp.individual06final.enumeration.Categoria;
 import es.cic.bootcamp.individual06final.model.Curso;
+import es.cic.bootcamp.individual06final.model.CursoProgramado;
 import es.cic.bootcamp.individual06final.model.Tematica;
 
 @DataJpaTest
-class CursoRepositoryTest {
-
-	@Autowired
-	private CursoRepository cursoRepository;
+class CursoProgramadoRepositoryTest {
 	
 	@Autowired
 	private TestEntityManager entityManager;
 
+	@Autowired
+	private CursoProgramadoRepository cursoProgramadoRepository;
+
 	@BeforeEach
 	void setUp() throws Exception {
 	}
-
 	@Test
 	void testSave() {
-		Tematica tematica = generarTematica();
-		
+		Tematica tematica = generarTematica();		
 		entityManager.persistAndFlush(tematica);
 		
 		Curso curso = generarCurso(tematica);
+		entityManager.persistAndFlush(curso);
 		
-		cursoRepository.save(curso);
+		CursoProgramado programado = generarProgramado(curso);
+		
+		
+		cursoProgramadoRepository.save(programado);
 		entityManager.flush();
-		entityManager.detach(curso);
+		entityManager.detach(programado);
 		
 		
-		Curso cursoEnBBDD = entityManager.find(Curso.class, curso.getId());
+		CursoProgramado programadoEnBBDD = entityManager.find(CursoProgramado.class, programado.getId());
 		
-		assertNotNull(curso.getId(), "La clave primaria no debería ser nula");
-		assertThat(curso)
-		.isEqualTo(cursoEnBBDD);
+		assertNotNull(programado.getId(), "La clave primaria no debería ser nula");
+		assertThat(programado)
+		.isEqualTo(programadoEnBBDD);
 	}
 
 	@Test
@@ -59,13 +64,16 @@ class CursoRepositoryTest {
 		
 		Curso curso = generarCurso(tematica);
 		entityManager.persistAndFlush(curso);
+		
+		CursoProgramado programado = generarProgramado(curso);	
+		entityManager.persistAndFlush(programado);
 		entityManager.detach(curso);
 		
-		Optional<Curso> resultado = cursoRepository.findById(curso.getId());
+		Optional<CursoProgramado> resultado = cursoProgramadoRepository.findById(programado.getId());
 		
 		assertTrue(resultado.isPresent(), "El registro no se ha leído correctamente");
 		
-		assertThat(curso)
+		assertThat(programado)
 		.usingRecursiveComparison()
 		.ignoringFields("id")
 		.isEqualTo(resultado.get());
@@ -77,17 +85,21 @@ class CursoRepositoryTest {
 
 		entityManager.persistAndFlush(tematica);
 
-		Curso curso1 = generarCurso(tematica);
-		Curso curso2 = generarCurso(tematica);
-		entityManager.persist(curso1);
-		entityManager.persistAndFlush(curso2);
+		Curso curso = generarCurso(tematica);
+		entityManager.persistAndFlush(curso);
 		
-		entityManager.detach(curso1);
-		entityManager.detach(curso2);
+
+		CursoProgramado programado1 = generarProgramado(curso);
+		CursoProgramado programado2 = generarProgramado(curso);
+		entityManager.persist(programado1);
+		entityManager.persistAndFlush(programado2);
 		
-		List<Curso> lista = new ArrayList<>();
+		entityManager.detach(programado1);
+		entityManager.detach(programado2);
 		
-		cursoRepository
+		List<CursoProgramado> lista = new ArrayList<>();
+		
+		cursoProgramadoRepository
 		.findAll()
 		.forEach(lista::add);
 		
@@ -96,7 +108,7 @@ class CursoRepositoryTest {
 		
 		
 		assertThat(lista)
-		.containsAll(List.of(curso1, curso2));
+		.containsAll(List.of(programado1, programado2));
 	}
 	
 	@Test
@@ -106,17 +118,21 @@ class CursoRepositoryTest {
 		entityManager.persistAndFlush(tematica);
 		
 		Curso curso = generarCurso(tematica);
-		entityManager.persistAndFlush(curso);
-		entityManager.detach(curso);
+		entityManager.persist(curso);
 		
-		Curso cursoAModificar = cursoRepository.findById(curso.getId()).get();
-		cursoAModificar.setNombre("BBDD 101");
+		CursoProgramado programado = generarProgramado(curso);
+		entityManager.persistAndFlush(programado);
+		entityManager.detach(programado);
 		
-		Curso cursoEnBBDD = entityManager.find(Curso.class, curso.getId());
 		
-		assertThat(cursoAModificar)
+		CursoProgramado programadoAModificar = cursoProgramadoRepository.findById(programado.getId()).get();
+		programadoAModificar.setFechaFin(null);
+		
+		CursoProgramado programadoEnBBDD = entityManager.find(CursoProgramado.class, programado.getId());
+		
+		assertThat(programadoAModificar)
 		.usingDefaultComparator()
-		.isEqualTo(cursoEnBBDD);
+		.isEqualTo(programadoEnBBDD);
 	}
 
 	@Test
@@ -129,57 +145,27 @@ class CursoRepositoryTest {
 
 		entityManager.persistAndFlush(curso);
 		
-		cursoRepository.deleteById(curso.getId());
-		entityManager.flush();
-		
-		Curso cursoEnBBDD = entityManager.find(Curso.class, curso.getId());
-		
-		assertNull(cursoEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
-	}
-	
-	@Test
-	void testExistsByTematicaId() {
-		Tematica tematica1 = generarTematica();
-		Tematica tematica2 = generarTematica();
-		
-		entityManager.persist(tematica1);
-		entityManager.persistAndFlush(tematica2);
-		
-		Curso curso1 = generarCurso(tematica2);
-		entityManager.persistAndFlush(curso1);
-		Curso curso2 = generarCurso(tematica2);
-		entityManager.persistAndFlush(curso2);
-		
-		boolean existe = cursoRepository.existsByTematicaId(tematica2.getId());
-		boolean noExiste = cursoRepository.existsByTematicaId(tematica1.getId());
-		
-		assertTrue(existe);
-		assertFalse(noExiste);
-	}
-	
+		CursoProgramado programado = generarProgramado(curso);
 
-	@Test
-	void testfindAllByActivoTrue() {
-		Tematica tematica1 = generarTematica();
+		entityManager.persistAndFlush(programado);
 		
-		entityManager.persistAndFlush(tematica1);
-		
-		Curso curso1 = generarCurso(tematica1);
-		entityManager.persist(curso1);
-		Curso curso2 = generarCurso(tematica1);
-		entityManager.persistAndFlush(curso2);
-		
-		curso1.setActivo(false);
-		entityManager.merge(curso1);
+		cursoProgramadoRepository.deleteById(programado.getId());
 		entityManager.flush();
 		
-		List<Curso> resultado = cursoRepository.findAllByActivoTrue();
+		CursoProgramado programadoEnBBDD = entityManager.find(CursoProgramado.class, programado.getId());
 		
-		assertThat(curso2)
-		.isIn(resultado);
+		assertNull(programadoEnBBDD, "No se ha borrado el registro correctamente de la base de datos.");
+	}
+	
+	private CursoProgramado generarProgramado(Curso curso) {
+		CursoProgramado cursoProgramado = new CursoProgramado();
 		
-		assertThat(curso1)
-		.isNotIn(resultado);
+		cursoProgramado.setCurso(curso);
+		cursoProgramado.setInscripcion(false);
+		cursoProgramado.setFechaInicio(LocalDate.of(2021, Month.APRIL, 14));
+		cursoProgramado.setFechaFin(LocalDate.of(2021, Month.SEPTEMBER, 30));
+		
+		return cursoProgramado;
 	}
 
 	
